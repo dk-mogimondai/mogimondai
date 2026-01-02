@@ -1,0 +1,3192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HPE7-A08問題集1</title>
+<style>
+    body {
+        font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f0f4f8; /* Sky Blue Base */
+    }
+    h1 {
+        text-align: center;
+        color: #004098; /* Sky Blue Deep */
+        border-bottom: 3px solid #004098;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+ .page-container {
+        display: none;
+        animation: fadeIn 0.5s;
+    }
+    .page-container.active {
+        display: block;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .question-card {
+        background: #fff;
+        border: 1px solid #dbe2e8;
+        border-radius: 8px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 2px 4px rgba(0,64,152,0.05);
+        border-left: 5px solid #004098;
+        position: relative;
+    }
+    .question-header {
+        font-size: 1.15em;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        border-bottom: 2px solid #eef2f5;
+        padding-bottom: 10px;
+    }
+    .question-badge {
+        background-color: #004098;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.8em;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+    
+    /* Interactive Options Styles */
+    .options-list {
+        list-style-type: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+    .options-list li {
+        padding: 10px 15px;
+        border: 2px solid #e1e8ed;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        font-size: 0.95em;
+        transition: all 0.2s;
+        cursor: pointer; /* Clickable */
+        position: relative;
+    }
+    .options-list li:hover {
+        background-color: #f5f9fc;
+        border-color: #badae8;
+    }
+    /* Selected State */
+    .options-list li.selected {
+        background-color: #e6f2ff;
+        border-color: #004098;
+        color: #004098;
+        font-weight: bold;
+    }
+    .options-list li.selected::after {
+        content: "✔";
+        position: absolute;
+        right: 15px;
+        color: #004098;
+        font-weight: bold;
+    }
+
+    /* Result Styling (Applied after checking) */
+    .options-list li.correct {
+        background-color: #d4edda !important;
+        border-color: #28a745 !important;
+        color: #155724 !important;
+    }
+    .options-list li.incorrect {
+        background-color: #f8d7da !important;
+        border-color: #dc3545 !important;
+        color: #721c24 !important;
+        opacity: 0.7;
+    }
+    .options-list li.missed {
+        border-color: #28a745 !important;
+        border-style: dashed !important;
+        background-color: #f0fff4 !important;
+    }
+
+    .option-label {
+        font-weight: bold;
+        color: #004098;
+        margin-right: 10px;
+    }
+    
+    /* 画像表示用のスタイル */
+    .question-image {
+        max-width: 100%;       /* 親要素（カード）からはみ出さない */
+        height: auto;          /* アスペクト比を維持 */
+        display: block;        /* ブロック要素として扱う */
+        margin: 15px auto;     /* 上下に余白、左右中央寄せ */
+        border: 1px solid #ddd; /* 薄い枠線をつける */
+        border-radius: 4px;    /* 角を少し丸くする */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 軽い影をつける */
+    }
+    
+    /* Toggle Details */
+    details {
+        background-color: #f7fbff;
+        border: 1px solid #cce5ff;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-top: 15px;
+    }
+    summary {
+        background-color: #004098; /* Changed to button style */
+        color: white;
+        padding: 12px 20px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1em;
+        transition: background-color 0.2s;
+        border-radius: 4px;
+        list-style: none; /* Remove default triangle */
+    }
+    summary::-webkit-details-marker {
+        display: none;
+    }
+    summary:hover {
+        background-color: #00337a;
+    }
+    summary::after {
+        content: "解答・解説を確認";
+    }
+    details[open] summary {
+        background-color: #e6f2ff;
+        color: #004098;
+        border-bottom: 1px solid #cce5ff;
+        justify-content: flex-start;
+    }
+    details[open] summary::after {
+        content: "解説を閉じる";
+    }
+    
+    /* Result Message Area */
+    .result-area {
+        padding: 15px;
+        margin: 0;
+        font-weight: bold;
+        text-align: center;
+        font-size: 1.2em;
+        border-bottom: 1px solid #eee;
+    }
+    .result-correct {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .result-incorrect {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .explanation-content {
+        padding: 20px;
+        font-size: 0.95em;
+        color: #444;
+        background-color: #fff;
+    }
+    .exp-section {
+        margin-bottom: 15px;
+        border-bottom: 1px dashed #eee;
+        padding-bottom: 10px;
+    }
+    .exp-section:last-child {
+        border-bottom: none;
+    }
+    .exp-header {
+        color: #004098;
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+ /* 解説内の見出しスタイル */
+    .exp-header-main {
+        font-size: 1.1em;
+        color: #004098;
+        border-left: 4px solid #004098;
+        padding-left: 10px;
+        margin: 20px 0 10px 0;
+        font-weight: bold;
+        background-color: #f0f4f8;
+        padding: 5px 10px;
+    }
+    
+    .code-block {
+        background-color: #1a2634;
+        color: #f8f8f2;
+        padding: 15px;
+        border-radius: 4px;
+        font-family: 'Consolas', monospace;
+        font-size: 0.85em;
+        overflow-x: auto;
+        margin-top: 10px;
+        white-space: pre;
+        line-height: 1.5;
+    }
+    
+ /* 正解・不正解アイコンのスタイル */
+    .status-icon {
+        display: inline-block;
+        width: 1.5em;
+        text-align: center;
+        margin-right: 5px;
+    }
+        
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 40px;
+        padding-bottom: 40px;
+        flex-wrap: wrap;
+    }
+    .page-btn {
+        padding: 8px 16px;
+        background: #fff;
+        border: 1px solid #cce0f5;
+        border-radius: 4px;
+        cursor: pointer;
+        color: #004098;
+        transition: all 0.2s;
+    }
+    .page-btn:hover {
+        background-color: #e6f2ff;
+    }
+    .page-btn.active {
+        background-color: #004098;
+        color: white;
+        border-color: #004098;
+    }
+    .page-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background-color: #f0f4f8;
+    }
+</style>
+</head>
+<body>
+
+    <h1>HPE7-A08問題集1</h1>
+
+    <!-- ================= PAGE 1 (Q1-10) ================= -->
+    <div id="page-1" class="page-container active">
+        
+                <!-- Q1 -->
+        <div class="question-card" id="q1">
+            <div class="question-header"><span class="question-badge">Q1</span>NAEモニタリングとBGP最適化</div>
+            <p>CPUとメモリの使用率、およびBGPピアの状態をNAE（Network Analytics Engine）で監視する設定を行っています。<br>
+            BGPのパフォーマンスを良好に維持し、リソース不足によるNAEアラートの発生（トリガー）を防ぐための「プロアクティブ（予防的）」な手段として適切なものを2つ選びなさい。</p>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> 正規表現（Regular expressions）を使用してプレフィックスリストを最適化する</li>
+                <li data-opt="B"><span class="option-label">B.</span> ルートフィルタリングを設定する</li>
+                <li data-opt="C"><span class="option-label">C.</span> ECMP（等コストマルチパス）を設定する</li>
+                <li data-opt="D"><span class="option-label">D.</span> ルートリフレクタを設定する</li>
+                <li data-opt="E"><span class="option-label">E.</span> VRFを設定する</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q1"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: A, B</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">✅</span><strong>A. 正規表現によるプレフィックスリストの最適化</strong><br>
+                    正しい。BGPの設定において、多数のASパスフィルターやプレフィックスリストを個別に記述すると、設定行数が膨大になり、コンフィグの解析やメモリ展開にオーバーヘッドが生じます。正規表現（Regular Expressions）を適切に使用して複数の条件を1行に集約することで、コントロールプレーンのメモリ消費を抑え、設定管理を効率化できます。これはリソース監視（CPU/メモリ）のアラートを防ぐ予防策として有効です。</p>
+
+                    <p><span class="status-icon">✅</span><strong>B. ルートフィルタリングを設定する</strong><br>
+                    正しい。不要な経路情報（ルート）を受信・保持しないようにフィルタリングを行うことは、ルータのメモリ使用量（RIB/FIBサイズ）とCPU負荷（ベストパス計算）を削減する最も直接的かつ効果的な方法です。NAEでメモリ使用率を監視している場合、ルート数を適切に制限することはアラート回避の最善策です。</p>
+
+                    <p><span class="status-icon">❌</span><strong>C. ECMPの設定</strong><br>
+                    間違い。ECMP（Equal Cost Multi-Path）はトラフィックの負荷分散技術であり、データプレーンのスループット向上には寄与しますが、コントロールプレーンのCPU/メモリ負荷を軽減するものではありません。逆に、複数のパスを管理するため計算リソースを微増させる可能性があります。</p>
+
+                    <p><span class="status-icon">❌</span><strong>D. ルートリフレクタの設定</strong><br>
+                    間違い。ルートリフレクタ（RR）はiBGPフルメッシュ接続の要件を緩和するためのスケーラビリティ技術です。大規模ネットワーク全体としてはセッション数を減らして負荷を下げますが、個々のスイッチ（特にRRクライアントでない通常のピア）のリソース枯渇を直接防ぐための「設定最適化」の手法としては、フィルタリング等に比べて文脈が異なります。</p>
+
+                    <p><span class="status-icon">❌</span><strong>E. VRFの設定</strong><br>
+                    間違い。VRF（Virtual Routing and Forwarding）はルーティングテーブルを論理的に分割する技術です。VRFを使用しても、スイッチ全体が保持するルート総数が減るわけではなく（むしろ分離管理でオーバーヘッドが増える場合もある）、CPU/メモリの節約策ではありません。</p>
+
+                    <div class="exp-header-main">問われている要件</div>
+                    <p>BGP運用環境において、スイッチのシステムリソース（CPU/メモリ）を節約し、NAEによる監視アラートを未然に防ぐための「設定上の工夫」が問われています。</p>
+
+                    <div class="exp-header-main">前提知識</div>
+                    <p><strong>BGPとリソース消費:</strong> BGPはインターネットフルルート（数十万経路）など大量の経路を扱うプロトコルであり、スイッチのDRAM（メモリ）とCPUを最も消費する機能の一つです。<br>
+                    <strong>AOS-CXとNAE:</strong> Aruba CXスイッチには分析エンジン（NAE）が組み込まれており、<code>system_resource_monitor</code> などのエージェントがCPUやメモリのしきい値超過を監視します。BGPプロセス（<code>bgp</code>デーモン）が高負荷になると、これがトリガーされてアラートが発報されます。</p>
+
+                    <div class="exp-header-main">解くための考え方</div>
+                    <ol>
+                        <li>問題文のゴールは「NAEアラートを防ぐ」＝「CPU/メモリ使用率を下げる」ことです。</li>
+                        <li>選択肢の中でリソース削減に直結する操作を探します。</li>
+                        <li>「ルートフィルタリング」→ 保持するデータ量を減らすので確実に削減になります。</li>
+                        <li>「正規表現による最適化」→ 設定行数の削減、パース処理の効率化によりメモリ/CPU効率に寄与します。</li>
+                    </ol>
+
+                    <div class="exp-header-main">実務・試験の要点</div>
+                    <p>試験では「パフォーマンス向上」という言葉が「スループット（帯域）」を指すのか、「コントロールプレーン（CPU/メモリ）」を指すのかを見極める必要があります。本問はNAEの監視項目（CPU/Memory）が明記されているため、後者です。</p>
+
+                    <div class="exp-header-main">ハンズオン</div>
+                    <div class="code-block">
+! プレフィックスリストの例（フィルタリング）
+ip prefix-list BLOCK_PRIVATE seq 10 deny 10.0.0.0/8 le 32
+ip prefix-list BLOCK_PRIVATE seq 20 deny 172.16.0.0/12 le 32
+ip prefix-list BLOCK_PRIVATE seq 30 deny 192.168.0.0/16 le 32
+ip prefix-list BLOCK_PRIVATE seq 40 permit 0.0.0.0/0 le 32
+
+! ASパスフィルタの例（正規表現）
+! 自ASの隣接のみ許可する（トランジットを防ぐ）
+ip as-path-list ONLY_NEIGHBOR permit ^[0-9]+$
+
+router bgp 65001
+    neighbor 10.1.1.2 remote-as 65002
+    address-family ipv4 unicast
+        neighbor 10.1.1.2 prefix-list BLOCK_PRIVATE in
+        neighbor 10.1.1.2 route-map AS_FILTER in
+    exit
+</div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-card" id="q2">
+            <div class="question-header"><span class="question-badge">Q2</span>L2暗号化要件</div>
+            <p>顧客は、すべてのAP（アクセスポイント）とCXスイッチ間のイーサネットフレームを「暗号化」および「認証」することを求めています。<br>
+            推奨すべきソリューションはどれですか。</p>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> MAC Auth（MAC認証）</li>
+                <li data-opt="B"><span class="option-label">B.</span> MAC-TLS</li>
+                <li data-opt="C"><span class="option-label">C.</span> Sticky MAC</li>
+                <li data-opt="D"><span class="option-label">D.</span> MACSec</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q2"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: D (MACSec)</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">❌</span><strong>A. MAC Auth</strong><br>
+                    間違い。MAC認証はデバイスのMACアドレスに基づいてネットワークアクセスを許可・拒否する「認証」機能ですが、通信内容の「暗号化」機能は提供しません。</p>
+
+                    <p><span class="status-icon">❌</span><strong>B. MAC-TLS</strong><br>
+                    間違い。これはEAP-TLS認証をMACアドレスベースで行うような概念（あるいは誤った用語の可能性）を示唆していますが、いずれにせよ認証プロトコルであり、イーサネットフレーム自体の暗号化（ペイロードの秘匿）は行いません。</p>
+
+                    <p><span class="status-icon">❌</span><strong>C. Sticky MAC</strong><br>
+                    間違い。ポートセキュリティ機能の一つで、一度学習したMACアドレスを固定化するものです。暗号化機能はありません。</p>
+
+                    <p><span class="status-icon">✅</span><strong>D. MACSec</strong><br>
+                    正しい。MACsec (IEEE 802.1AE) は、レイヤ2（イーサネット）レベルでパケットごとの暗号化（AES-GCM）と認証（改ざん検知）を提供する標準規格です。スイッチとAP間、あるいはスイッチ間のリンクを物理的に盗聴されても解読不能にするため、要件に完全に合致します。</p>
+
+                    <div class="exp-header-main">問われている要件</div>
+                    <p>「イーサネットフレームの暗号化」というキーワードが出た時点で、レイヤ2暗号化技術であるMACsec一択となります。</p>
+
+                    <div class="exp-header-main">前提知識</div>
+                    <p><strong>IEEE 802.1AE (MACsec):</strong> ホップバイホップのセキュリティを提供します。IPsecがL3でエンドツーエンド（またはゲートウェイ間）の暗号化を行うのに対し、MACsecは直結された隣接機器間のL2リンクを保護します。<br>
+                    <strong>Arubaの実装:</strong> CXスイッチとAruba AP間では、動的なキー交換を用いてMACsecトンネルを確立可能です。</p>
+
+                    <div class="exp-header-main">実務・試験の要点</div>
+                    <p>試験で「Switch-Switch間」や「Switch-AP間」の通信保護・盗聴防止と聞かれたらMACsecを想起してください。IPsecは通常、拠点間VPN（SD-WAN等）やUBT（User Based Tunneling）の制御プレーン等で使用されます。</p>
+
+                    <div class="exp-header-main">ハンズオン</div>
+                    <div class="code-block">
+! MACsecポリシーの作成
+macsec policy MY_MACSEC_POLICY
+    cipher-suite gcm-aes-128
+! インターフェースへの適用
+interface 1/1/1
+    apply macsec policy MY_MACSEC_POLICY
+    no shutdown
+</div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-card" id="q3">
+            <div class="question-header"><span class="question-badge">Q3</span>iBGP設定要件</div>
+            <p>AS 65010を使用しているHPE Aruba NetworkingスイッチでBGPを設定する必要があります。<br>
+            隣接デバイスとiBGP（Internal BGP）ピアを確立する際に必要な設定はどれですか。</p>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> remote-as 65100 を使用する</li>
+                <li data-opt="B"><span class="option-label">B.</span> next-hop-self を使用する</li>
+                <li data-opt="C"><span class="option-label">C.</span> remote-as 65010 を使用する</li>
+                <li data-opt="D"><span class="option-label">D.</span> 各ネイバーに対して router-id を使用する</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q3"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: C</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">❌</span><strong>A. Use of remote-as 65100</strong><br>
+                    間違い。自ASが65010であるのに対し、異なるAS番号（65100）を指定すると、それは「eBGP（External BGP）」ピアの設定になります。</p>
+
+                    <p><span class="status-icon">❌</span><strong>B. Use of next-hop-self</strong><br>
+                    間違い。<code>next-hop-self</code> はiBGPでよく使われるコマンドですが、ピアを「確立」するための必須要件ではありません。これはeBGPから学習したルートをiBGPネイバーに広告する際、Next-Hop属性を自分に書き換えるためのオプション設定です。</p>
+
+                    <p><span class="status-icon">✅</span><strong>C. Use of remote-as 65010</strong><br>
+                    正しい。iBGP（内部BGP）とは、同一のAS番号を持つルータ同士の接続を指します。自ASが65010であれば、相手（ネイバー）のAS番号も65010を指定することでiBGPとして動作します。</p>
+
+                    <p><span class="status-icon">❌</span><strong>D. Use of router-id for each neighbor</strong><br>
+                    間違い。Router-IDはBGPインスタンスごとに1つ設定するものであり、ネイバーごとに設定するものではありません。</p>
+
+                    <div class="exp-header-main">問われている要件</div>
+                    <p>iBGPの定義（同じAS番号同士のピアリング）を理解しているかが問われています。</p>
+
+                    <div class="exp-header-main">前提知識</div>
+                    <p><strong>iBGP vs eBGP:</strong><br>
+                    - <strong>iBGP:</strong> Neighbor AS = Local AS。TTLはデフォルト255。AS-Path属性を付与しない。<br>
+                    - <strong>eBGP:</strong> Neighbor AS ≠ Local AS。TTLはデフォルト1。AS-Path属性を付与する。</p>
+
+                    <div class="exp-header-main">ハンズオン</div>
+                    <div class="code-block">
+router bgp 65010
+    bgp router-id 10.0.0.1
+    ! iBGPピアの設定（自ASと同じ番号を指定）
+    neighbor 10.0.0.2 remote-as 65010
+    ! eBGPピアの設定（異なる番号を指定）
+    neighbor 192.168.1.1 remote-as 65100
+</div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-card" id="q4">
+            <div class="question-header"><span class="question-badge">Q4</span>sFlow設定の読み取り</div>
+            <p>以下のsFlow設定を確認してください。正しい記述はどれですか。（2つ選択）<br>
+            <div class="code-block">
+switch# show sflow
+sFlow Global         Configuration
+----------------------------------------------------
+sFlow                enabled
+Collector IP/Port/Vrf 10.0.0.2/6343/default
+                     10.0.0.3/6400/default
+Agent Address        10.0.0.1
+Sampling Rate        1024
+Polling Interval     30
+Header Size          128
+Max Datagram Size    1400
+
+sFlow Status
+----------------------------------------------------
+Running - Yes
+
+sFlow Statistics
+----------------------------------------------------
+Number of Samples    200
+</div>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> エージェントアドレスが設定されていない。</li>
+                <li data-opt="B"><span class="option-label">B.</span> データは1024秒ごとに収集される。</li>
+                <li data-opt="C"><span class="option-label">C.</span> 1400バイトのうち1024バイトのデータが収集される。</li>
+                <li data-opt="D"><span class="option-label">D.</span> データは30秒ごとに収集される。</li>
+                <li data-opt="E"><span class="option-label">E.</span> 1024バイト（パケット）ごとに1つ収集される。</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q4"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: D, E</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">❌</span><strong>A. エージェントアドレス未設定</strong><br>
+                    間違い。問題文の出力例（図示されている場合）には通常 <code>Agent Address 10.0.0.1</code> のような表示が含まれており、設定されています。</p>
+
+                    <p><span class="status-icon">❌</span><strong>B. データは1024秒ごとに収集</strong><br>
+                    間違い。1024はSampling Rate（サンプリングレート）であり、時間間隔ではありません。</p>
+
+                    <p><span class="status-icon">❌</span><strong>C. 1400バイト中1024バイト収集</strong><br>
+                    間違い。これはHeader SizeやMax Datagram Sizeに関する誤った解釈です。sFlowはパケットの先頭（ヘッダ部分、通常128バイト程度）を切り出して送ります。</p>
+
+                    <p><span class="status-icon">✅</span><strong>D. データは30秒ごとに収集される</strong><br>
+                    正しい。<code>Polling Interval: 30</code> は「カウンターポーリング」の間隔を指します。インターフェースの統計情報（オクテット数、エラー数など）は30秒ごとにコレクターへ送信されます。</p>
+
+                    <p><span class="status-icon">✅</span><strong>E. 1024バイト（パケット）ごとに1つ収集される</strong><br>
+                    正しい。<code>Sampling Rate: 1024</code> は「パケットサンプリング」の比率（1/N）を指します。平均して1024パケット通過するごとに1パケットをサンプリングしてコレクターへ送信します。（※選択肢の表記が「bytes」となっている場合がありますが、sFlowの仕様上は「パケット数」ベースのサンプリングレートを指すのが一般的です。文脈上、レート設定の動作を指す選択肢としてこれが正解となります。）</p>
+
+                    <div class="exp-header-main">前提知識</div>
+                    <p><strong>sFlow (RFC 3176):</strong> 以下の2つのメカニズムで動作します。<br>
+                    1. <strong>Flow Sampling (Sampling Rate):</strong> 通過パケットをN個に1個の割合でランダムに抽出。トラフィックの中身を分析するために使用。<br>
+                    2. <strong>Counter Polling (Polling Interval):</strong> 定期的にインターフェースのカウンター（MIB-II相当）を取得。トラフィック総量やエラー率の監視に使用。</p>
+
+                    <div class="exp-header-main">ハンズオン</div>
+                    <div class="code-block">
+sflow agent-ip 10.0.0.1
+sflow collector 10.0.0.2 port 6343 vrf default
+! インターフェースごとの設定
+interface 1/1/1
+    sflow sampling 1024
+    sflow polling 30
+    sflow enable
+</div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q5 -->
+        <div class="question-card" id="q5">
+            <div class="question-header"><span class="question-badge">Q5</span>ライセンス管理レポート</div>
+            <p>HPE Aruba Networkingのライセンス使用状況と、その有効期限を追跡する月次レポートを受け取りたいと考えています。<br>
+            どのレポートをスケジュールすべきですか。</p>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> Network（ネットワーク）</li>
+                <li data-opt="B"><span class="option-label">B.</span> Switch Capacity Planning（スイッチキャパシティプランニング）</li>
+                <li data-opt="C"><span class="option-label">C.</span> Infra Inventory（インフラ・インベントリ）</li>
+                <li data-opt="D"><span class="option-label">D.</span> Resource Utilization（リソース使用率）</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q5"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: B</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">❌</span><strong>A. Network</strong><br>
+                    間違い。ネットワーク全体の一般的なステータスレポートであり、ライセンスの詳細な期限管理には特化していません。</p>
+
+                    <p><span class="status-icon">✅</span><strong>B. Switch Capacity Planning</strong><br>
+                    正しい。Aruba Centralや管理ツールにおける「Capacity Planning」レポートは、将来のリソース枯渇を予測するためのものです。これにはポートの空き状況やPoEバジェットに加え、サブスクリプションライセンスの有効期限や更新が必要な時期に関する情報が含まれます。</p>
+
+                    <p><span class="status-icon">❌</span><strong>C. Infra Inventory</strong><br>
+                    間違い。インベントリレポートは、デバイスのモデル、シリアル番号、ファームウェアバージョンなどのハードウェア/ソフトウェア資産一覧を提供しますが、ライセンスの有効期限管理とは目的が異なります。</p>
+
+                    <p><span class="status-icon">❌</span><strong>D. Resource Utilization</strong><br>
+                    間違い。CPUやメモリ、帯域幅などの「稼働パフォーマンスリソース」の使用率を示すレポートです。</p>
+
+                    <div class="exp-header-main">解くための考え方</div>
+                    <p>「有効期限（Expiration dates）」や「利用可能数（Available）」というキーワードは、将来の計画（Planning）に関連します。リソースがいつなくなるかを知る＝キャパシティプランニングの一環と捉えるのが正解への近道です。</p>
+
+                    <div class="exp-header-main">実務・試験の要点</div>
+                    <p>Aruba Centralのレポート機能に関する知識が問われています。ライセンスは「購入・更新」が必要なアセットであり、キャパシティプランニングのカテゴリで扱われることを覚えておきましょう。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q6 -->
+        <div class="question-card" id="q6">
+            <div class="question-header"><span class="question-badge">Q6</span>光ファイバー距離要件とトランシーバ選定</div>
+            <img src="images/Q6.png" alt="Q6" class="question-image">
+            <p>シニアネットワークアーキテクトが作成した構成案では、ビルAとビルCの間を接続する予定です。<br>
+            実際の光ファイバーの距離は200mで、OM4ケーブルを使用します。<br>
+            実際の環境条件に基づいて、インストールを完了するために設定を変更する必要があります。<br>
+            正しい変更案はどれですか。</p>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> 25SR光学モジュールを10SRに変更する</li>
+                <li data-opt="B"><span class="option-label">B.</span> 25SR光学モジュールを25LRに変更する</li>
+                <li data-opt="C"><span class="option-label">C.</span> 25SR光学モジュールを25eSRに変更する</li>
+                <li data-opt="D"><span class="option-label">D.</span> 25SR光学モジュールを10LRに変更する</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q6"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: C (25eSR)</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">❌</span><strong>A. 10SRに変更</strong><br>
+                    間違い。10GBASE-SRに変更すると帯域幅が25Gbpsから10Gbpsに低下します。また、10GBASE-SRでもOM4で400mまで届きますが、要件である25Gbps性能を満たしません。</p>
+
+                    <p><span class="status-icon">❌</span><strong>B. 25LRに変更</strong><br>
+                    間違い。LR（Long Reach）トランシーバはSMF（シングルモードファイバー）専用です。敷設されているケーブルはOM4（マルチモードファイバー）であるため、物理的に適合しません。</p>
+
+                    <p><span class="status-icon">✅</span><strong>C. 25eSRに変更</strong><br>
+                    正しい。標準の25GBASE-SRはOM4ケーブルで最大100m（OM3で70m）しか伝送できません。今回の距離は200mあるため、SRでは届きません。Arubaの25G eSR（Extended SR）トランシーバを使用すると、OM4ケーブルで最大300m（または400m）まで伝送距離を延長できるため、200mの要件を満たします。</p>
+
+                    <p><span class="status-icon">❌</span><strong>D. 10LRに変更</strong><br>
+                    間違い。帯域幅が低下する上、LRはSMF用であるためケーブルタイプが不一致です。</p>
+
+                    <div class="exp-header-main">問われている要件</div>
+                    <p>マルチモードファイバー（OM4）環境下で、標準のSR規格（100m限界）を超える200mの距離を、25Gbpsの帯域を維持したまま接続する適切なトランシーバ選定能力が問われています。</p>
+
+                    <div class="exp-header-main">前提知識</div>
+                    <p><strong>25GBASE-SR:</strong> MMF(OM4)で最大100m。<br>
+                    <strong>25GBASE-eSR:</strong> Aruba独自の拡張規格トランシーバ。MMF(OM4)で最大300m〜400m。<br>
+                    <strong>25GBASE-LR:</strong> SMFで最大10km。</p>
+
+                    <div class="exp-header-main">実務・試験の要点</div>
+                    <p>「OM3/OM4 = マルチモード = SR/eSR/CSR」「OS2 = シングルモード = LR/ER」の組み合わせは基本です。標準SRの距離限界（10Gなら300/400m、25Gなら70/100m）を超えた場合、ケーブルを張り替える（SMFにする）か、拡張トランシーバ（eSR/Lrmなど）を使うかの二択になります。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q7 -->
+        <div class="question-card" id="q7">
+            <div class="question-header"><span class="question-badge">Q7</span>Colorless Portsの実装</div>
+            <p>顧客のCISO（最高情報セキュリティ責任者）は、ネットワーク全体に「Colorless Ports（カラーレスポート）」を展開したいと考えています。<br>
+            この要件を満たすために設定が必要な機能はどれですか。</p>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> Sticky MAC</li>
+                <li data-opt="B"><span class="option-label">B.</span> MAC Auth（MAC認証）</li>
+                <li data-opt="C"><span class="option-label">C.</span> Port-security</li>
+                <li data-opt="D"><span class="option-label">D.</span> Virtual MAC</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q7"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: B</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">❌</span><strong>A. Sticky MAC</strong><br>
+                    間違い。これはポートセキュリティの一種で、特定のMACアドレスをポートに固定する静的なセキュリティ機能です。動的な役割割り当て（Colorless）とは対極にあります。</p>
+
+                    <p><span class="status-icon">✅</span><strong>B. MAC Auth（MAC認証）</strong><br>
+                    正しい。Colorless Port（Dynamic Segmentation）とは、どのポートに接続してもデバイスを識別し、適切なVLANやポリシーを動的に適用する機能です。これを実現するには、デバイスが接続された瞬間に認証（802.1XまたはMAC認証）を行い、Radiusサーバ（ClearPass等）からポリシーを受け取る必要があります。</p>
+
+                    <p><span class="status-icon">❌</span><strong>C. Port-security</strong><br>
+                    間違い。AOS-CXにおけるPort-securityは、ポートごとのMACアドレス数制限などを指し、動的なVLAN割り当て機能ではありません。</p>
+
+                    <p><span class="status-icon">❌</span><strong>D. Virtual MAC</strong><br>
+                    間違い。VSXなどで使用される仮想MACアドレスの概念であり、ポート認証とは無関係です。</p>
+
+                    <div class="exp-header-main">前提知識</div>
+                    <p><strong>Colorless Ports:</strong> ポートに事前に特定のVLAN設定（Color）を行わず、接続デバイスに応じてVLANを決定するコンセプト。Aruba Dynamic Segmentationの中核機能です。</p>
+
+                    <div class="exp-header-main">解くための考え方</div>
+                    <p>「Colorless = ポートの色（VLAN）が無い」→「誰かが決める必要がある」→「認証サーバが決める」→「認証機能（802.1X/MAC Auth）が必要」というロジックで導き出せます。</p>
+
+                    <div class="exp-header-main">ハンズオン</div>
+                    <div class="code-block">
+! Colorless Portの設定例
+interface 1/1/1
+    no shutdown
+    no routing
+    vlan access 1
+    aaa authentication port-access dot1x authenticator
+        enable
+    aaa authentication port-access mac-auth
+        enable
+</div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q8 -->
+        <div class="question-card" id="q8">
+            <div class="question-header"><span class="question-badge">Q8</span>LAGの負荷分散ハッシュ</div>
+            <p>2つのスイッチ間のLAG（リンクアグリゲーショングループ）を通過するトラフィックを監視したところ、トラフィックが不均等に分散（偏り）していることに気づきました。<br>
+            sFlowを使用して分析した結果、トラフィックの大部分は「1つのクライアント」と「1つのサーバー」の間で行われており、「複数のトランスポート層の宛先ポート」が使用されていることが判明しました。<br>
+            この情報に基づいて、どのハッシュアルゴリズムを設定すべきですか。</p>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> l4-src-dst</li>
+                <li data-opt="B"><span class="option-label">B.</span> l3-src-dst</li>
+                <li data-opt="C"><span class="option-label">C.</span> l2-src-dst</li>
+                <li data-opt="D"><span class="option-label">D.</span> l1-src-dst</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q8"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: A</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">✅</span><strong>A. l4-src-dst</strong><br>
+                    正しい。通信が「1対1（IPアドレスが固定）」であっても、「複数の宛先ポート（L4ポート）」を使用している場合、L4情報（TCP/UDPポート番号）をハッシュ計算に含めることで、フローごとに異なる物理リンクへ分散させることが可能です。</p>
+
+                    <p><span class="status-icon">❌</span><strong>B. l3-src-dst</strong><br>
+                    間違い。送信元IPと宛先IPのみを使用します。今回は「1クライアント対1サーバー」なのでIPアドレスは常に同じペアであり、ハッシュ値も常に同じになるため、特定の1本のリンクにトラフィックが偏ります。</p>
+
+                    <p><span class="status-icon">❌</span><strong>C. l2-src-dst</strong><br>
+                    間違い。MACアドレスのみを使用します。IP同様、MACアドレスも固定であるため分散されません。</p>
+
+                    <div class="exp-header-main">解くための考え方</div>
+                    <ol>
+                        <li>負荷分散（ハッシュ）のキーになる要素を探す。</li>
+                        <li>「1クライアント・1サーバー」→ IP/MACは変化しない（分散できない）。</li>
+                        <li>「複数のトランスポート層ポート」→ TCP/UDPポート番号は変化する（分散できる）。</li>
+                        <li>L4（トランスポート層）を含むハッシュアルゴリズムを選択する。</li>
+                    </ol>
+
+                    <div class="exp-header-main">実務・試験の要点</div>
+                    <p>デフォルトのハッシュアルゴリズムはL3の場合が多いです。特定のバックアップ処理や大容量ファイル転送で偏りが発生する場合、<code>l4-src-dst</code> への変更がトラブルシューティングの定石です。</p>
+
+                    <div class="exp-header-main">ハンズオン</div>
+                    <div class="code-block">
+! 負荷分散アルゴリズムの変更
+interface lag 1
+    hashing l4-src-dst
+</div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q9 -->
+        <div class="question-card" id="q9">
+            <div class="question-header"><span class="question-badge">Q9</span>CX 6100とDynamic Segmentation</div>
+            <p>顧客は、ビルBのユーザーに対して「Dynamic Segmentation」を利用したいと考えています。<br>
+            現在の構成にはCX 6100スイッチが含まれています。このシナリオに関する正しい記述はどれですか。</p>
+            <img src="images/Q9.png" alt="Q9" class="question-image">
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> CX 6100スイッチは、Aruba CX 8325へのGREトンネルを設定する必要がある。</li>
+                <li data-opt="B"><span class="option-label">B.</span> CX 6100スイッチには、要件をサポートするためにCX Premiumライセンスが必要である。</li>
+                <li data-opt="C"><span class="option-label">C.</span> CX 6100スイッチは、CX 6200シリーズ以上に交換する必要がある。</li>
+                <li data-opt="D"><span class="option-label">D.</span> CX 6100スイッチは、Aruba 9240へのVXLANトンネルを設定する必要がある。</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q9"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: C</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">❌</span><strong>A, D. トンネル設定</strong><br>
+                    間違い。CX 6100はハードウェア（ASIC）の制約上、UBT（User Based Tunneling）やVXLANといったトンネリング機能をサポートしていません。</p>
+
+                    <p><span class="status-icon">❌</span><strong>B. ライセンス</strong><br>
+                    間違い。ライセンスの問題ではなく、ハードウェア能力の問題です。</p>
+
+                    <p><span class="status-icon">✅</span><strong>C. CX 6200シリーズ以上に交換が必要</strong><br>
+                    正しい。Aruba CXポートフォリオにおいて、Dynamic Segmentation（UBTによるコントローラへのトンネリング）をサポートする最小モデルは「CX 6200」シリーズです。CX 6000/6100シリーズはL2エントリーモデルであり、この機能を持っていません。</p>
+
+                    <div class="exp-header-main">問われている要件</div>
+                    <p>AOS-CXスイッチラインナップの機能差分（特にDynamic Segmentation/UBTのサポート可否）についての製品知識が問われています。</p>
+
+                    <div class="exp-header-main">実務・試験の要点</div>
+                    <p>「6100はL2スイッチ（VLAN/Static Route程度）」「6200はアクセス層のフル機能（Vsf/UBT/OSPF等）」「6300は高性能アクセス/アグリゲーション（Smart Rate/High Power PoE）」という大まかな分類を覚えておきましょう。</p>
+                </div>
+            </details>
+        </div>
+
+        <!-- Q10 -->
+        <div class="question-card" id="q10">
+            <div class="question-header"><span class="question-badge">Q10</span>NAEアクション (チケット起票)</div>
+            <p>BGPネイバーの状態変化を監視し、変化が発生した際に自動的にヘルプデスクチケットを作成するようにNAEを設定したいと考えています。<br>
+            これを実現するために設定できるNAEアクションはどれですか。</p>
+            <ul class="options-list">
+                <li data-opt="A"><span class="option-label">A.</span> REST API call</li>
+                <li data-opt="B"><span class="option-label">B.</span> Execute shell command</li>
+                <li data-opt="C"><span class="option-label">C.</span> Send email</li>
+                <li data-opt="D"><span class="option-label">D.</span> Generate system log</li>
+            </ul>
+            <details>
+                <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+                <div class="result-area" id="res-q10"></div>
+                <div class="explanation-content">
+                    <p><strong>正解: A</strong></p>
+
+                    <div class="exp-header-main">選択肢別・徹底解説</div>
+                    <p><span class="status-icon">✅</span><strong>A. REST API call</strong><br>
+                    正しい。ServiceNowやJiraなどの最新のITSM（ITサービスマネジメント）ツールは、外部システムとの連携用にREST APIを提供しています。NAEエージェントのアクションとして「REST APIコール」を設定することで、アラート発生時に直接チケットシステムのAPIを叩き、チケットを自動起票することが可能です。</p>
+
+                    <p><span class="status-icon">❌</span><strong>B. Execute shell command</strong><br>
+                    間違い。スイッチ内部でのCLI実行は可能ですが、外部のチケットシステムと連携する標準的な手段ではありません。</p>
+
+                    <p><span class="status-icon">❌</span><strong>C. Send email</strong><br>
+                    間違い。メールでの通知は可能であり、一部のチケットシステムはメール取込に対応していますが、「チケット作成」のための最も確実でモダンな連携方法はAPI連携です。</p>
+
+                    <p><span class="status-icon">❌</span><strong>D. Generate system log</strong><br>
+                    間違い。Syslogはログサーバーへの通知であり、チケットシステムへの能動的な起票アクションではありません。</p>
+
+                    <div class="exp-header-main">実務・試験の要点</div>
+                    <p>NAE (Network Analytics Engine) の強みは「Pythonスクリプトによる柔軟な拡張性」と「外部システム連携」です。特に「ServiceNowとの連携」はArubaの推奨ソリューションの一つであり、その手段としてREST APIが使われます。</p>
+                </div>
+            </details>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 2 (Q11-20) ================= -->
+    <div id="page-2" class="page-container">
+        
+        <div class="question-card" id="q11">
+    <div class="question-header"><span class="question-badge">Q11</span>有線クライアントのトンネリング設定</div>
+    <p>顧客は、APからのトラフィックをトンネリングするために既存のゲートウェイ（コントローラ）クラスターを使用しています。<br>
+    CXスイッチに対しても同様の設定を行い、トラフィックをゲートウェイへトンネリングしたいと考えています。<br>
+    推奨されるトンネリングオプションはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> UBT (User Based Tunneling)</li>
+        <li data-opt="B"><span class="option-label">B.</span> IPSec</li>
+        <li data-opt="C"><span class="option-label">C.</span> VNBT</li>
+        <li data-opt="D"><span class="option-label">D.</span> GRE</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q11"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. UBT (User Based Tunneling)</strong><br>
+            [cite_start]正しい。UBTは、有線スイッチ（CXスイッチ）に接続されたクライアントのトラフィックを、GREカプセル化してAruba Gateway（コントローラ）へトンネリングする機能です [cite: 167-178]。これにより、有線クライアントに対しても無線LANと同様のファイアウォールポリシーやDPI（ディープパケットインスペクション）を一元的に適用可能になります。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. IPSec</strong><br>
+            間違い。IPSecは拠点間のVPN接続やSD-WAN、あるいはRAP（Remote AP）の通信保護に使用されますが、キャンパスLAN内でのクライアントトラフィックの動的トンネリングの標準的な手法ではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. VNBT</strong><br>
+            間違い。VNBT（Virtual Network Based Tunneling）は、Aruba Central NetConductorなどで使用されるEVPN-VXLANベースのファブリック技術を指す文脈で使われますが、「既存のゲートウェイへAPと同様にトンネリングする」という従来のオーバーレイ要件にはUBTが適合します。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. GRE</strong><br>
+            間違い。UBTの裏側ではGREプロトコルが使用されていますが、Arubaソリューションとして、認証やポリシーサーバー（ClearPass）と連携し、ユーザーごとのロールに基づいて動的にトンネルを生成する機能名は「UBT」です。単なるGRE設定では動的な制御ができません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>「既存のゲートウェイを活用」し、「APと同じように（＝コントローラベースのアーキテクチャで）」有線トラフィックを処理するためのAruba独自の機能を特定する知識が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Dynamic Segmentation:</strong> Arubaのセキュリティフレームワーク。ポート単位（Colorless Ports）で認証を行い、その結果に基づいてトラフィックをローカルで処理するか、ゲートウェイへトンネリング（UBT）するかを決定します。<br>
+            <strong>UBTの仕組み:</strong> スイッチがPAPI（UDP 8211）でゲートウェイと制御情報をやり取りし、データプレーンにはGRE（Protocol 47）を使用します。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「APと同様のトンネリング」＝「Client to Gatewayのトンネル」を想起する。</li>
+                <li>有線スイッチでこれを実現するAruba用語を探す。</li>
+                <li>User Based Tunneling (UBT) が正解。</li>
+            </ol>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>UBTには「Local UBT（スイッチ内で完結）」と「Centralized UBT（ゲートウェイへトンネル）」がありますが、試験で単にUBTと出た場合は後者を指すことが一般的です。CX 6200以上でサポートされます（6000/6100は不可）。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! UBTの基本設定 (Gatewayへの接続)
+ubt-client-profile MY_UBT_PROFILE
+    server primary 10.0.0.10
+    server secondary 10.0.0.11
+    enable
+
+interface 1/1/1
+    ubt-client-profile MY_UBT_PROFILE
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q12">
+    <div class="question-header"><span class="question-badge">Q12</span>VSFスタックの冗長化設定</div>
+    <p>HPE Aruba Networking CX 6300Mを使用したVSFスタック構成の出力結果を確認しています。<br>
+    現在、Member 1がConductor、Member 2がMemberの状態です。<br>
+    どちらのメンバーがダウンしてもスタックとして機能し続ける（フェイルオーバーする）ために、VSF設定に必要なコマンドはどれですか。</p>
+    <div class="code-block">
+Access-1(config)# show vsf
+
+Force Autojoin               : Disabled
+Autojoin Eligibility Status  : Not Eligible
+MAC Address                  : 10:4f:58:fc:14:40
+Egress Shape Rate            : None
+Secondary                    : 
+Topology                     : Chain
+Status                       : No Split
+Split Detection Method       : None
+
+Mbr Mac Address          type        Status
+ID
+---  -----------------  ----------  -----------------
+1    10:4f:58:fc:14:40  JL668A      Conductor
+2    10:4f:58:f6:84:80  JL668A      Member
+</div>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> vsf secondary-member 2</li>
+        <li data-opt="B"><span class="option-label">B.</span> vsf start-auto-stacking</li>
+        <li data-opt="C"><span class="option-label">C.</span> vsf conductor-member 2</li>
+        <li data-opt="D"><span class="option-label">D.</span> vsf split-detect mgmt</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q12"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. vsf secondary-member 2</strong><br>
+            [cite_start]正しい。VSF（Virtual Switching Framework）において、Conductor（マスター）がダウンした際に即座に役割を引き継ぐ「Standby Conductor」を指名する設定です。これを設定しない場合、Member 2は単なるメンバーとして扱われ、障害時の役割選出プロセスが最適化されません [cite: 206-208]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. vsf start-auto-stacking</strong><br>
+            間違い。これは初期セットアップ時に、ケーブル接続されたスイッチを自動的に検出しスタックを形成するためのコマンドです。冗長化の役割定義ではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. vsf conductor-member 2</strong><br>
+            間違い。このようなコマンドは存在しません。役割は `secondary-member` コマンドで定義します。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. vsf split-detect mgmt</strong><br>
+            間違い。これはスプリットブレイン（スタックリンクが切れて両方がマスターになってしまう状態）を検知・防止するための機能です。重要ですが、「フェイルオーバーそのものを可能にする」ための役割定義ではありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>スタック構成における高可用性（HA）を担保するための、明示的な役割設定（Standbyの指定）の方法が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>VSFの役割:</strong><br>
+            1. <strong>Conductor:</strong> 管理プレーン、コントロールプレーンを司る。<br>
+            2. <strong>Standby:</strong> Conductorと同期し、障害時に昇格する。<br>
+            3. <strong>Member:</strong> ラインカードとして動作する。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>VSFを構成したら、必ず `vsf secondary-member <ID>` を設定するのがベストプラクティスです。これにより、意図しないメンバーがConductorになるのを防ぎ、フェイルオーバー時間を短縮できます。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! VSFでメンバー2をセカンダリ(Standby)に指定する
+config
+vsf secondary-member 2
+exit
+write memory
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q13">
+    <div class="question-header"><span class="question-badge">Q13</span>Active Gatewayの利点</div>
+    <p>既存のL3アグリゲーションスイッチペアを交換する際、Active Gateway機能を提案する利点は何ですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 仮想IPのフェイルオーバー時間がサブミリ秒である</li>
+        <li data-opt="B"><span class="option-label">B.</span> 業界標準のFHRP（VRRP等）と互換モードで動作できる</li>
+        <li data-opt="C"><span class="option-label">C.</span> スタック構成のHPE Aruba Networkingソリューションでサポートされる</li>
+        <li data-opt="D"><span class="option-label">D.</span> スイッチペア間でセッションを均等に分散する</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q13"></div>
+        <div class="explanation-content">
+            <p><strong>正解: D</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. サブミリ秒のフェイルオーバー</strong><br>
+            間違い。Active Gatewayは「フェイルオーバー」という概念よりも「常時Active-Active」であることを重視します。障害時は単に生きている側が処理を続けるだけですが、サブミリ秒という数値規定が主な利点ではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. 標準FHRP互換</strong><br>
+            間違い。Active GatewayはAruba/HPE独自のActive-Active実装であり、標準のVRRPと互換性を持たせて混在させるものではありません（移行時にはVRRPを使います）。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. スタック対応</strong><br>
+            間違い。Active Gatewayは主に「VSX（Virtual Switching Extension）」構成で使用される機能です。スタック（VSF）では単一のコントロールプレーンを持つため、通常のSVI設定で十分であり、Active Gatewayの文脈とは異なります。</p>
+
+            <p><span class="status-icon">✅</span><strong>D. スイッチペア間でセッションを均等に分散する</strong><br>
+            [cite_start]正しい。Active Gatewayの最大の利点は、ペアとなる両方のスイッチが同じ仮想MAC/仮想IPを持ち、データプレーン上でトラフィックを同時にルーティングできることです。これにより、VRRPのようなActive-Standby構成と異なり、帯域と処理能力を有効活用（負荷分散）できます [cite: 223-225]。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>Active Gatewayと従来のVRRP/HSRPとの違い、特に「Active-Activeによる負荷分散」というメリットを理解しているかが問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Active Gateway:</strong> VSX環境において、同じ仮想IP/MACを2台のスイッチに設定します。クライアントからのARP要求に対して、ローカルで受信したスイッチが直接応答し、ルーティング処理を行います。ノースバウンドのトラフィックはLAGのハッシュにより2台に分散されるため、結果としてセッションが分散されます。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! Active Gatewayの設定
+interface vlan 10
+    ip address 10.0.10.2/24
+    active-gateway ip 10.0.10.1
+    active-gateway mac 00:00:5E:00:01:01
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q14">
+    <div class="question-header"><span class="question-badge">Q14</span>リンクローカル・マルチキャストのルーティング</div>
+    <p>顧客はCX 6300スイッチのVLAN 100にサーバーを接続し、マルチキャストグループ <code>224.0.0.100</code> を使用してビデオ配信を行っています。<br>
+    このストリームを、同じスイッチ上のVLAN 200およびVLAN 300のクライアントでも受信できるようにする必要があります。<br>
+    要件を満たすために必要な対応はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> マルチキャストグループアドレスをルーティング可能なサブネットに変更する</li>
+        <li data-opt="B"><span class="option-label">B.</span> VLAN 100, 200, 300のSVIでigmpを有効にする</li>
+        <li data-opt="C"><span class="option-label">C.</span> マルチキャストグループアドレスを他の重複しない224.0.0.xアドレスに変更する</li>
+        <li data-opt="D"><span class="option-label">D.</span> VLAN 100, 200, 300のSVIでigmp-snoopingを有効にする</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q14"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. マルチキャストグループアドレスをルーティング可能なサブネットに変更する</strong><br>
+            [cite_start]正しい。IPアドレス範囲 <code>224.0.0.0/24</code> は、IANAによって「Local Network Control Block」として予約されています。この範囲のパケットはTTLが1に設定され、ルータ（L3スイッチ）はこれらをルーティングしません（サブライン外へ転送しません）。異なるVLANへ配信するには、<code>239.x.x.x</code>（組織内スコープ）などのルーティング可能なアドレス範囲に変更する必要があります [cite: 226-234]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. IGMPの有効化</strong><br>
+            間違い。IGMPの設定自体は必要ですが、アドレスがルーティング不可（リンクローカル）であるという根本的な問題は解決しません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. 別の224.0.0.xへの変更</strong><br>
+            間違い。<code>224.0.0.x</code> の範囲内であれば、どのアドレスに変更してもルータは転送を行いません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. IGMP Snoopingの有効化</strong><br>
+            間違い。IGMP SnoopingはL2スイッチ機能（VLAN内でのフラッディング防止）であり、VLAN間ルーティングを実現するものではありません。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>RFC 5771:</strong> マルチキャストアドレスの割り当て。<br>
+            - <strong>224.0.0.0 - 224.0.0.255:</strong> ローカルネットワーク制御用（OSPF, VRRP等）。ルータは転送しない。<br>
+            - <strong>239.0.0.0 - 239.255.255.255:</strong> プライベート（管理用）スコープ。社内LANでの利用に推奨。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>トラブルシューティング問題で「マルチキャストが届かない」場合、真っ先にアドレス範囲を確認してください。224.0.0.x が使われていたら、設定ミスやアプリケーションの仕様上の制約を疑う必要があります。</p>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q15">
+    <div class="question-header"><span class="question-badge">Q15</span>BGP AS番号の選定</div>
+    <p>あなたの会社は、所有するパブリックアドレス空間を2つのISPへ広報するために、BGPをマルチホーム構成で運用する必要があります。<br>
+    使用するAS番号として適切な例はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 63468</li>
+        <li data-opt="B"><span class="option-label">B.</span> 65218</li>
+        <li data-opt="C"><span class="option-label">C.</span> 64813</li>
+        <li data-opt="D"><span class="option-label">D.</span> 65535</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q15"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. 63468</strong><br>
+            [cite_start]正しい。AS番号の範囲において、<strong>1 ～ 64511</strong> は「パブリックAS番号」としてインターネット上でのルーティングに使用されます。ISPと接続し、自社のパブリックIPをインターネット全体に広報する場合、RIR（APNIC/JPNIC等）から割り当てられたパブリックAS番号を使用する必要があります [cite: 235-243]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. 65218</strong><br>
+            間違い。これはプライベートAS番号の範囲内です。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. 64813</strong><br>
+            間違い。これもプライベートAS番号の範囲内です。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. 65535</strong><br>
+            間違い。これもプライベートAS番号の範囲内（かつ2バイトAS番号の最後）です。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>AS番号の分類 (2バイト):</strong><br>
+            - <strong>1 - 64511:</strong> Public AS (インターネットで使用)<br>
+            - <strong>64512 - 65534:</strong> Private AS (組織内部、閉域網で使用)<br>
+            - <strong>65535:</strong> Reserved<br>
+            ※現在は4バイトAS番号も普及していますが、試験ではこの古典的な区分けがよく問われます。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「インターネットへ広報（advertising ... to ISPs）」という要件を確認。</li>
+                <li>パブリックASが必要であると判断。</li>
+                <li>64512未満の数字を探す。</li>
+            </ol>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! BGPプロセスの開始（パブリックASの例）
+router bgp 63468
+    bgp router-id 203.0.113.1
+    neighbor 198.51.100.1 remote-as 64500
+</div>
+        </div>
+    </details>
+</div>
+
+        <div class="question-card" id="q16">
+    <div class="question-header"><span class="question-badge">Q16</span>IGMP Querierの選出プロセス</div>
+    <p>VSXスイッチのペアでPIMとIGMPクエリア（Querier）機能を有効にしましたが、すべてのVLANにおいて、常に「Secondaryスイッチ」がクエリアとして選出されていることに気づきました。<br>
+    この動作の原因として考えられるものはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> Secondaryスイッチの方がIPアドレスが低い</li>
+        <li data-opt="B"><span class="option-label">B.</span> Primaryスイッチの方がMACアドレスが高い</li>
+        <li data-opt="C"><span class="option-label">C.</span> Secondaryスイッチの方がVRRP優先度（Priority）が高い</li>
+        <li data-opt="D"><span class="option-label">D.</span> Primaryスイッチの方が稼働時間（uptime）が短い</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q16"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. Secondaryスイッチの方がIPアドレスが低い</strong><br>
+            [cite_start]正しい。IGMPv2およびIGMPv3の標準仕様（RFC 2236/3376）において、同一セグメント上に複数のマルチキャストルーターが存在する場合、<strong>最も低いIPアドレスを持つルーター</strong>がIGMPクエリア（Querier）として選出されます [cite: 247-248]。VSX構成であっても、IGMPコントロールプレーンは各スイッチで独立して動作するため、設定されたIPアドレス（SVI IP）が低い方が選ばれます。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. MACアドレスが高い</strong><br>
+            間違い。IGMPクエリアの選出にMACアドレスは使用されません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. VRRP優先度</strong><br>
+            間違い。VRRPのMaster選出とIGMPクエリアの選出は無関係です。VRRP Masterがクエリアになるとは限りません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. 稼働時間</strong><br>
+            間違い。OSPFのDR選出などとは異なり、IGMPクエリア選出はプリエンプティブ（より低いIPを持つ機器が現れれば即座に交代する）であり、稼働時間は考慮されません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>IGMPプロトコルの基本的な選出仕様（Lowest IP wins）を理解しているか、およびそれがVSX環境でも適用されることを知っているかが問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>IGMP Querier:</strong> 定期的にMembership Queryを送信し、マルチキャストグループへの参加状況を監視する役割。同一LAN内に1台だけ選出されます。<br>
+            <strong>VSXとIGMP:</strong> VSX環境ではMC-LAG上でのマルチキャスト転送を最適化するため、両方のスイッチがトラフィックを転送する場合がありますが、IGMPの制御メッセージ（Query）の送信元は1台に絞られます。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>通常、Primaryスイッチに若番のIP（例: .2）、Secondaryに老番のIP（例: .3）を割り当てることが多いため、本来はPrimaryがQuerierになるのが一般的です。設問の状況は、Secondaryに意図せず低いIPが設定されているか、設計上の意図があるケースを示唆しています。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! クエリアの状態確認
+show ip igmp interface vlan 10
+! 出力例に "Querier: 10.0.10.2 (This system)" や
+! "Querier: 10.0.10.2 (Other system)" と表示される
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q17">
+    <div class="question-header"><span class="question-badge">Q17</span>NAEの時刻同期エラー対処</div>
+    <p>スイッチのNTPとタイムゾーンを設定し、Webブラウザのタイムゾーンも一致させましたが、NAEダッシュボードに「Switch time and browser time are not in sync（スイッチの時刻とブラウザの時刻が同期していません）」というエラーメッセージが表示されます。<br>
+    この問題を解決するために実施すべきアクションはどれですか。（2つ選択）</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> スイッチのNTP設定で iburst を使用する</li>
+        <li data-opt="B"><span class="option-label">B.</span> Webクライアント（ブラウザ）のキャッシュをクリアする</li>
+        <li data-opt="C"><span class="option-label">C.</span> ブラウザ側でNTP同期を設定する</li>
+        <li data-opt="D"><span class="option-label">D.</span> スイッチのCLIからNTPを無効化する</li>
+        <li data-opt="E"><span class="option-label">E.</span> スイッチのCLIからNAEデータをクリアする</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q17"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B, E</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. iburstの使用</strong><br>
+            間違い。<code>iburst</code>はNTP同期を高速化するオプションですが、すでにNTPが設定されている状況下で、Web UI表示上の不整合を直す直接的な解決策ではありません。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. Webクライアントのキャッシュをクリアする</strong><br>
+            [cite_start]正しい。ブラウザが古いセッション情報や時刻情報をキャッシュしている場合、スイッチ側が正常でもエラーが表示され続けることがあります。キャッシュクリアは推奨されるトラブルシューティングの第一歩です [cite: 258-259]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. ブラウザのNTP設定</strong><br>
+            間違い。ブラウザ単体にNTP設定機能はありません（OSの時刻に依存します）。PCの時刻が正しいことは前提ですが、選択肢としては不適切です。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. NTP無効化</strong><br>
+            間違い。時刻同期を止めてしまうと、ログの整合性が取れなくなり、問題が悪化します。</p>
+
+            <p><span class="status-icon">✅</span><strong>E. スイッチのCLIからNAEデータをクリアする</strong><br>
+            [cite_start]正しい。NAEの時系列データベース（Prometheus等）内に保持されている古いデータやタイムスタンプの不整合が原因でエラーが出る場合があります。CLIからNAEデータをリセットすることで、現在の正しい時刻で再構成され、エラーが解消します [cite: 262-263]。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>Web UI（NAE）特有のトラブルシューティング手法について問われています。ブラウザ側とスイッチ内部DB側の両面からのアプローチが必要です。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <p>「設定は正しいはずなのにエラーが出る」→「表示（キャッシュ）かデータ（DB）の不整合」を疑います。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! NAEデータのリセット（コマンド例）
+clear nae-data
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q18">
+    <div class="question-header"><span class="question-badge">Q18</span>中間者攻撃（ARPスプーフィング）対策</div>
+    <p>顧客は、L2アドレッシングに基づく「中間者攻撃（Man-in-the-Middle attacks）」を防ぎたいと考えています。<br>
+    この懸念に対処するために役立つ設定はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> インターフェースコンテキストで ARP inspection を有効にする</li>
+        <li data-opt="B"><span class="option-label">B.</span> VLANコンテキストで ARP inspection を有効にする</li>
+        <li data-opt="C"><span class="option-label">C.</span> VLANインターフェース（SVI）コンテキストで ARP inspection を有効にする</li>
+        <li data-opt="D"><span class="option-label">D.</span> グローバルコンテキストで ARP inspection を有効にする</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q18"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A, C, D. 間違ったコンテキスト</strong><br>
+            AOS-CXにおいて、Dynamic ARP Inspection (DAI) の有効化コマンドは、物理インターフェースやSVI、グローバル設定ではなく、「VLAN設定モード」の中で実行する必要があります。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. VLANコンテキストで ARP inspection を有効にする</strong><br>
+            [cite_start]正しい。DAIはVLAN単位で機能するセキュリティ機能です。対象となるVLANに入り、<code>arp inspection</code> コマンドを発行することで有効化されます [cite: 268-269]。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>L2中間者攻撃の代表格である「ARPスプーフィング（ARPポイズニング）」の対策機能であるDAIの、AOS-CXにおける正しい設定階層（コンテキスト）が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Dynamic ARP Inspection (DAI):</strong> DHCP Snoopingによって作成されたバインディングデータベース（IPとMACの正しい組み合わせ）を参照し、不正なARP応答パケットを破棄する機能。<br>
+            <strong>設定手順:</strong> まずDHCP SnoopingをグローバルおよびVLANで有効化し、その後DAIを対象VLANで有効化します。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! 正しい設定手順
+vlan 10
+    arp inspection
+! 確認
+show arp inspection
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q19">
+    <div class="question-header"><span class="question-badge">Q19</span>Colorless Portsの実装要件</div>
+    <p>顧客のCISO（最高情報セキュリティ責任者）は、ネットワーク全体に「Colorless Ports（カラーレスポート）」を展開したいと考えています。<br>
+    この要件を満たすために設定が必要な機能はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> IKE (Internet Key Exchange)</li>
+        <li data-opt="B"><span class="option-label">B.</span> UBT (User Based Tunneling)</li>
+        <li data-opt="C"><span class="option-label">C.</span> Q-in-Q</li>
+        <li data-opt="D"><span class="option-label">D.</span> GRE</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q19"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. IKE</strong><br>
+            間違い。IKEはIPSec VPNの鍵交換プロトコルであり、Colorless Portsの文脈では直接使用しません。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. UBT (User Based Tunneling)</strong><br>
+            [cite_start]正しい。Colorless Ports（Dynamic Segmentation）の核心は、ポートに固定の設定を入れず、認証結果（Role）に応じてトラフィックの処理を決める点にあります。その際、トラフィックをゲートウェイに転送して高度な検査を行うために不可欠な技術がUBTです [cite: 277-278]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. Q-in-Q</strong><br>
+            間違い。VLANタギングを二重に行うL2 VPN技術であり、ロールベースの動的制御とは異なります。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. GRE</strong><br>
+            間違い。UBTは内部的にGREを使用しますが、Arubaのソリューション機能名として設定・管理するのは「UBT」です。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>Colorless Ports (Dynamic Segmentation) の構成要素として重要なトンネリング技術を選択する問題です。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>Q7（認証が必要）とQ19（トンネリングが必要）はセットで理解しましょう。「Colorless Ports」を実現するには、「誰かを見分ける認証（802.1X/MAC）」と「それに基づいて運ぶトンネル（UBT）」の両方が必要です。</p>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q20">
+    <div class="question-header"><span class="question-badge">Q20</span>SVIへのHTTPSアクセス許可</div>
+    <p>HPE Aruba Networking CX 8100スイッチにおいて、デフォルト設定の後に作成されたSVI（Switch Virtual Interface）へのHTTPSアクセスを有効にする必要があります。<br>
+    この要件を満たすコマンドはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> HTTPSサーバーはデフォルトでアクセス可能です。</li>
+        <li data-opt="B"><span class="option-label">B.</span> コマンド <code>https-server vrf default</code> を使用してHTTPSアクセスを許可する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> HTTPSサーバーはmgmt VRFからのみアクセス可能です。</li>
+        <li data-opt="D"><span class="option-label">D.</span> コマンド <code>https-server vrf mgmt</code> を使用してHTTPSアクセスを許可する。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q20"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. デフォルトでアクセス可能</strong><br>
+            間違い。AOS-CXの初期状態では、セキュリティ強化のため、データポート用VRF（vrf default）でのHTTPS/SSHサーバー機能は無効になっているか、あるいは明示的な有効化が推奨される場合があります（バージョンによるが、設問の文脈では「有効にする必要がある」とあるため、デフォルト無効または制限されている前提）。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. コマンド <code>https-server vrf default</code> を使用する</strong><br>
+            [cite_start]正しい。管理用ポート（mgmt）以外のSVI（VLANインターフェース）を経由してWeb UIやREST APIにアクセスする場合、そのVRF（通常は default）でHTTPSサーバー機能を有効にする必要があります [cite: 287-289]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. mgmt VRFのみアクセス可能</strong><br>
+            間違い。設定を変更することで、どのVRFからでもアクセス可能です。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. vrf mgmtを使用する</strong><br>
+            間違い。これは管理ポート（OOBM）用の設定であり、設問にある「作成されたSVI（データプレーン）」へのアクセス設定ではありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>管理プレーンのセキュリティとVRFの概念、およびAOS-CXにおけるサービス有効化のコマンド体系（VRF単位での指定）が問われています。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! default VRFでHTTPSサーバーを有効化
+https-server vrf default
+! 確認
+show https-server
+</div>
+        </div>
+    </details>
+</div>
+    </div>
+
+    <!-- ================= PAGE 3 (Q21-30) ================= -->
+    <div id="page-3" class="page-container">
+        
+       <div class="question-card" id="q21">
+    <div class="question-header"><span class="question-badge">Q21</span>LACP Fallbackの用途</div>
+    <p>VSX LAGの設定を確認していたところ、<code>lacp fallback</code> コマンドが設定されていることに気づきました。<br>
+    この設定が行われている理由として正しいものはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> LACPが設定されていないゲートウェイ（PXEブート時のサーバー等）のプロビジョニングをサポートするため</li>
+        <li data-opt="B"><span class="option-label">B.</span> LACP v1との下位互換性のため</li>
+        <li data-opt="C"><span class="option-label">C.</span> シングルパートナーインターフェースでの運用のため</li>
+        <li data-opt="D"><span class="option-label">D.</span> ActiveまたはPassive LACPでの動作を許可するため</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q21"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. LACP未設定のGateway（PXEブート等）のプロビジョニングをサポートするため</strong><br>
+            [cite_start]正しい。LACP Fallback機能は、LAGインターフェースが対向機器からのLACP PDU（制御パケット）を受信できない場合でも、タイムアウト後にそのポートを強制的に「アップ」状態にし、通信を許可する機能です。これは、OSインストール前のサーバー（PXEブート中）のように、LACPスタックがまだ起動していないデバイスをネットワークに接続させる際（ZTP: Zero Touch Provisioning）に不可欠です [cite: 297-299]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. LACP v1との互換性のため</strong><br>
+            間違い。LACPのバージョン互換性のためのコマンドではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. シングルパートナーインターフェースでの運用のため</strong><br>
+            間違い。単一リンクでのLAG運用自体はLACPの標準動作で可能ですが、Fallbackは「LACPを話さない相手」との接続維持が目的です。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. Active/Passiveの動作許可のため</strong><br>
+            間違い。Active/Passiveモードの設定は <code>lacp mode active/passive</code> で行います。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>サーバー接続用ポート（特にLAG構成時）において、OS起動前の初期設定段階（プロビジョニング）で通信を確保するためのLACP拡張機能についての理解が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>LACP Fallback:</strong> 通常、LACP設定されたポートは相手とネゴシエーションが成立するまでブロックされます。Fallbackを設定すると、一定時間（デフォルト60秒など）LACP PDUが来ない場合、そのポートを通常の非LAGポート（単独ポート）としてアクティブにします。PDUを受信し始めると正規のLAG動作に戻ります。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! LACPフォールバックの設定例
+interface lag 1
+    no shutdown
+    lacp mode active
+    lacp fallback
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q22">
+    <div class="question-header"><span class="question-badge">Q22</span>管理外スイッチ接続への対策</div>
+    <p>顧客は、ユーザーが管理外のスイッチを勝手にネットワークへ接続し、ネットワーク停止（ループ障害等）を引き起こすことを懸念しています。<br>
+    この懸念に対処するために推奨されるCXスイッチの機能はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> Port security</li>
+        <li data-opt="B"><span class="option-label">B.</span> MAC authentication</li>
+        <li data-opt="C"><span class="option-label">C.</span> BPDU Guard</li>
+        <li data-opt="D"><span class="option-label">D.</span> Loop protection</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q22"></div>
+        <div class="explanation-content">
+            <p><strong>正解: C</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. Port security</strong><br>
+            間違い。MACアドレス数制限などでスイッチ接続をある程度防げますが、スイッチ自体が接続された瞬間のBPDU送信やループ発生を即座に止める機能としてはBPDU Guardがより専門的です。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. MAC authentication</strong><br>
+            間違い。認証機能ですが、許可されたデバイス配下にHUB等を接続されるケースには無力な場合があります。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. BPDU Guard</strong><br>
+            [cite_start]正しい。エンドユーザー用ポート（Edge Port）にスイッチが接続されると、そのスイッチはSTP（スパニングツリー）のBPDUフレームを送信してきます。BPDU GuardはこのBPDUを受信した瞬間にポートをエラーディセーブル（シャットダウン）にし、ネットワークトポロジーへの参加やループの発生を未然に防ぎます [cite: 312-314]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. Loop protection</strong><br>
+            間違い。これは自身の送信したテストパケットが戻ってくるかを監視する機能です。BPDU Guardは「他者がSTPを話そうとしたこと」を検知して遮断するため、管理外スイッチ排除にはこちらが適しています。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>エッジポートのセキュリティ対策として、不正なL2デバイス（スイッチ/HUB）接続によるトポロジー破壊を防ぐベストプラクティスが問われています。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「ユーザーが勝手にスイッチを接続」→ そのスイッチはBPDUを出す。</li>
+                <li>BPDUを見たらポートを落としたい。</li>
+                <li>「BPDU Guard」が正解。</li>
+            </ol>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! アクセスポートでのBPDUガード設定
+interface 1/1/1
+    spanning-tree bpdu-guard
+    spanning-tree port-type admin-edge
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q23">
+    <div class="question-header"><span class="question-badge">Q23</span>レガシー管理システムのサポート</div>
+    <p>顧客は、新しいCXスイッチが既存の「レガシー管理システム」をサポートするかどうか質問しています。<br>
+    レガシー管理システムに含まれる機能・プロトコルはどれですか。（2つ選択）</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> HTTPS</li>
+        <li data-opt="B"><span class="option-label">B.</span> NAE</li>
+        <li data-opt="C"><span class="option-label">C.</span> CLI</li>
+        <li data-opt="D"><span class="option-label">D.</span> REST API</li>
+        <li data-opt="E"><span class="option-label">E.</span> SNMP</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q23"></div>
+        <div class="explanation-content">
+            <p><strong>正解: C, E</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. HTTPS</strong><br>
+            間違い。Web UI管理は一般的ですが、試験の分類上、CLI/SNMPほど「レガシー（伝統的）」とは見なされないか、もしくは「モダン」寄り（REST APIの基盤）と捉えられます。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. NAE</strong><br>
+            間違い。Network Analytics EngineはAOS-CX独自の最新の分析機能であり、モダン管理の象徴です。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. CLI</strong><br>
+            [cite_start]正しい。Command Line Interface (Telnet/SSH) は最も伝統的な管理手法であり、レガシーシステム（スクリプトやTeraTermマクロ等）で広く使われています [cite: 322-323]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. REST API</strong><br>
+            間違い。プログラマビリティを提供する最新の管理手法です。</p>
+
+            <p><span class="status-icon">✅</span><strong>E. SNMP</strong><br>
+            [cite_start]正しい。Simple Network Management Protocolは長年監視に使用されてきた標準プロトコルであり、多くの既存監視ツール（レガシーシステム）がこれに依存しています [cite: 326-327]。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>「モダン = REST API, NAE, Python」「レガシー = SNMP, CLI」という対比構造を理解しておきましょう。AOS-CXは両方をフルサポートしています。</p>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q24">
+    <div class="question-header"><span class="question-badge">Q24</span>異機種間でのFHRP移行戦略</div>
+    <p>既存のHPE Comwareスイッチと並行して、新しいVSXスイッチペアを展開しています。<br>
+    移行戦略の一環として、共通のFHRP（First Hop Redundancy Protocol）を設定したいと考えています。<br>
+    このシナリオに適したプロトコルはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> Active Gateway</li>
+        <li data-opt="B"><span class="option-label">B.</span> VRRP</li>
+        <li data-opt="C"><span class="option-label">C.</span> HSRP</li>
+        <li data-opt="D"><span class="option-label">D.</span> Active Forwarding</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q24"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. Active Gateway</strong><br>
+            間違い。Aruba CX独自の機能であり、Comwareスイッチではサポートされていません。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. VRRP</strong><br>
+            [cite_start]正しい。Virtual Router Redundancy ProtocolはIETF標準の冗長化プロトコルであり、HPE ComwareとAruba CXの両方でサポートされています。移行期間中に異なるOSのスイッチ間でゲートウェイ冗長を組む場合、唯一の選択肢となります [cite: 333-334]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. HSRP</strong><br>
+            間違い。Cisco独自のプロトコルです。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. Active Forwarding</strong><br>
+            間違い。VSX環境内の機能であり、他ベンダー製品との相互接続用ではありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>マルチベンダー（あるいは新旧OS混在）環境での相互運用性を担保する標準プロトコルの知識が問われています。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>ComwareとCXをつなぐ。</li>
+                <li>共通言語（標準規格）が必要。</li>
+                <li>FHRPの標準はVRRP。</li>
+            </ol>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! VRRPの設定例
+interface vlan 10
+    ip address 10.0.10.2/24
+    vrrp 1 address-family ipv4
+        address 10.0.10.1 primary
+        no shutdown
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q25">
+    <div class="question-header"><span class="question-badge">Q25</span>OSPFとBFDのトラブルシューティング</div>
+    <p>CXスイッチでOSPF用にBFD（Bidirectional Forwarding Detection）を設定しましたが、BFDセッションがダウンしたままであるにもかかわらず、OSPFネイバー状態はアップのままです。<br>
+    この動作の原因として考えられるものはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> グローバルコンフィグレーションレベルでBFDが有効化されていない</li>
+        <li data-opt="B"><span class="option-label">B.</span> リモートスイッチがBFDをサポートしていない</li>
+        <li data-opt="C"><span class="option-label">C.</span> ローカルスイッチはOSPFv3を使用しているが、リモートはOSPFv2を使用している</li>
+        <li data-opt="D"><span class="option-label">D.</span> OSPFブロードキャストリンクではBFDがサポートされていないため、設定が無視されている</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q25"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. グローバルコンフィグレーションレベルでBFDが有効化されていない</strong><br>
+            [cite_start]正しい。AOS-CXにおいてBFDを使用するには、各インターフェースでの設定に加え、グローバルまたはOSPFプロセスレベルで明示的にBFD機能を有効にする必要がある場合があります（バージョンやコンテキストによる）。特に設問の状況「BFDが機能していないがOSPFは動いている」は、BFDプロセス自体が起動していないか、OSPFとの連携設定が不足していることを示唆しています [cite: 341-343]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. リモートスイッチがBFD非対応</strong><br>
+            間違い。相手が非対応の場合、BFDセッションは確立しませんが、OSPF自体はBFDなしで動作し続けます。ただし、設問の「BFDセッションがダウンしたまま」という記述とも合致しますが、正解の選択肢としては「設定漏れ（A）」の方が、トラブルシューティングの初期確認項目として優先度が高い（あるいは試験問題の意図として正解とされている）傾向にあります。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. OSPFv2/v3の不一致</strong><br>
+            間違い。バージョンが違えばOSPFネイバー自体が確立しません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. ブロードキャストリンクでの非サポート</strong><br>
+            間違い。AOS-CXはSVI等のブロードキャストネットワークタイプでもBFDをサポートしています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>BFD (Bidirectional Forwarding Detection):</strong> helloパケットよりも高速（ミリ秒単位）でリンク障害を検知するプロトコル。OSPF等のルーティングプロトコルと連携し、障害検知時に即座にネイバーをダウンさせて再収束を促します。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>BFDの設定は「インターフェースでのパラメータ設定」と「ルーティングプロトコル側でのBFD有効化」の2ステップが必要です。片方だけでは動作しません。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! OSPFでのBFD有効化
+router ospf 1
+    bfd all-interfaces
+    ! または特定のインターフェースのみ有効化も可能
+</div>
+        </div>
+    </details>
+</div>
+
+        <div class="question-card" id="q26">
+    <div class="question-header"><span class="question-badge">Q26</span>モダンな管理アプローチの推奨</div>
+    <p>顧客に対して、新しいCXスイッチの導入に伴い「モダンな管理アプローチ（Modern Management Approach）」を採用することを推奨しました。<br>
+    このアプローチに含まれる機能・技術はどれですか。（2つ選択）</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> NAE (Network Analytics Engine)</li>
+        <li data-opt="B"><span class="option-label">B.</span> SNMP</li>
+        <li data-opt="C"><span class="option-label">C.</span> XML</li>
+        <li data-opt="D"><span class="option-label">D.</span> YAML</li>
+        <li data-opt="E"><span class="option-label">E.</span> REST API</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q26"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A, E</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. NAE (Network Analytics Engine)</strong><br>
+            [cite_start]正しい。NAEはAOS-CXスイッチに組み込まれた分析エンジンで、Pythonスクリプトを用いてスイッチの状態（構成、プロトコル、トラフィックなど）をリアルタイムに監視・分析します。従来の「外部サーバーがポーリングしてデータを集める」手法に対し、「スイッチ自身が分析して結果を通知する」というエッジ処理のアプローチは、モダンなネットワーク管理の象徴的な機能です [cite: 350-351]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. SNMP</strong><br>
+            間違い。SNMP (Simple Network Management Protocol) は1980年代から存在する標準プロトコルであり、現在も広く利用されていますが、管理手法の分類としては「レガシー（伝統的）」に位置づけられます。ポーリング間隔の制約やセキュリティの課題などがあり、モダンな管理ではTelemetryやAPIへ移行しつつあります。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. XML / D. YAML</strong><br>
+            間違い。XMLやYAMLはデータの記述形式（フォーマット）です。REST APIのペイロードやAnsibleのPlaybookで使用されますが、それ自体が「管理機能」や「アプローチ」を指す用語ではありません。</p>
+
+            <p><span class="status-icon">✅</span><strong>E. REST API</strong><br>
+            [cite_start]正しい。AOS-CXは「APIファースト」の設計思想で作られており、スイッチのすべての設定やステータス取得がREST API経由で可能です。これにより、AnsibleやPython、ServiceNowなどの外部ツールとHTTPベースで容易に連携でき、Infrastructure as Code (IaC) を実現するモダンな管理手法の中核となります [cite: 357-358]。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>従来のCLIやSNMPによる運用管理と比較して、AOS-CXが提供する「プログラマビリティ」と「自動化」に関連する現代的な技術要素を選択する能力が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>レガシー管理:</strong> CLI（手動入力）、SNMP（死活監視・トラップ）。人間が介在する場面が多く、スケーラビリティに課題がある。<br>
+            <strong>モダン管理:</strong> REST API（プログラム連携）、NAE（オンボックス分析）、Streaming Telemetry（プッシュ型監視）。自動化、即時性、DevOpsとの親和性が高い。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「モダン」というキーワードから、最近のトレンドである「自動化」「API」「分析」を連想する。</li>
+                <li>選択肢の中で、Aruba CXの特徴的な機能を探す → NAE。</li>
+                <li>プログラムから操作するためのインターフェースを探す → REST API。</li>
+            </ol>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+# REST APIの使用例 (curlコマンドでVLAN情報を取得)
+curl -k -X GET \
+  'https://<Switch_IP>/rest/v10.04/system/vlans' \
+  -H 'Cookie: session_id=<Session_Token>'
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q27">
+    <div class="question-header"><span class="question-badge">Q27</span>ARP Protectionの導入手順</div>
+    <p>HPE Aruba Networking CXスイッチで「ARP Protection（ARP保護）」機能を有効にする際の記述として、正しいものはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> ARP保護を有効にするには、DHCPサーバーの使用率情報が必須である。</li>
+        <li data-opt="B"><span class="option-label">B.</span> ARP保護を有効にする前に、DHCPサーバーのクライアントリース時間を少なくとも3600秒に設定する必要がある。</li>
+        <li data-opt="C"><span class="option-label">C.</span> 稼働中のネットワークでは、DHCP Snoopingを有効にしてからARP保護を有効にするまで、少なくとも1週間程度待つべきである。</li>
+        <li data-opt="D"><span class="option-label">D.</span> DHCP Snoopingを有効にしたら、即座にARP保護を有効にしてもよい。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q27"></div>
+        <div class="explanation-content">
+            <p><strong>正解: C</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. サーバー使用率</strong><br>
+            間違い。DHCPサーバーのCPU使用率やスコープ使用率などの情報は、スイッチ側のセキュリティ機能であるARP Protectionの動作要件には含まれません。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. リース時間 3600秒</strong><br>
+            間違い。特定のリース時間設定は必須要件ではありません。ただし、リース時間が極端に長いと、スイッチのSnoopingデータベース更新頻度が下がるため考慮は必要ですが、機能有効化の前提条件ではありません。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. 少なくとも1週間程度待つべきである</strong><br>
+            [cite_start]正しい。ARP Protectionは、DHCP Snoopingによって構築された「バインディングデータベース（IPとMACの対応表）」を参照してパケットの正当性を検査します。Snoopingを有効にした直後はデータベースが空の状態です。既存のクライアントがDHCPリクエスト（更新や再接続）を行い、データベースに登録されるまで待つ必要があります。一般的なオフィス環境では、休暇明けの端末なども含めて全端末が一巡するのに1週間程度を見込むのが安全なベストプラクティスです [cite: 365-367]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. 即座に有効化</strong><br>
+            間違い。データベースが不完全な状態でARP Protectionを有効にすると、正規の端末からのARPパケットも「データベースにない＝不正」とみなされて破棄され、通信断が発生します。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>セキュリティ機能（Dynamic ARP Inspection）を既存ネットワークに導入する際の、運用上のリスク回避手順と仕組みの理解が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Dynamic ARP Inspection (DAI):</strong> 信頼できないポート（Untrusted）からのARPパケットを検査する機能。<br>
+            <strong>検査ロジック:</strong> 受信したARPパケットの Sender IP / Sender MAC の組み合わせが、DHCP Snooping Binding Database に存在すれば許可、なければ破棄します。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>試験では「機能をどう設定するか」だけでなく「導入時に何に気をつけるか」がよく問われます。「Snooping有効化」→「DB構築待ち（学習期間）」→「ARP Protection有効化」の順序は鉄則です。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! 1. DHCP Snoopingの有効化
+dhcp-snooping
+vlan 10
+    dhcp-snooping
+
+! (ここで数日間待機し、DBが埋まるのを待つ)
+! 確認コマンド: show dhcp-snooping binding
+
+! 2. ARP Protectionの有効化
+vlan 10
+    arp inspection
+</div>
+        </div>
+    </details>
+</div>
+
+        <div class="question-card" id="q28">
+    <div class="question-header"><span class="question-badge">Q28</span>NAEエージェントのアクション</span></div>
+    <p>NAE (Network Analytics Engine) エージェントで設定可能なアクションとして有効なものはどれですか。（2つ選択）</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 新規TACケースの作成</li>
+        <li data-opt="B"><span class="option-label">B.</span> リモートSyslogサーバへのログ送信</li>
+        <li data-opt="C"><span class="option-label">C.</span> クリティカルアラームレベルの設定（Set critical alarm level）</li>
+        <li data-opt="D"><span class="option-label">D.</span> SNMPトラップの生成</li>
+        <li data-opt="E"><span class="option-label">E.</span> パケットキャプチャの開始/停止</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q28"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B, C</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. TACケース作成</strong><br>
+            間違い。外部ITSMツール（ServiceNowなど）と連携してチケットを作成することは可能ですが、スイッチが直接メーカー（Aruba）のサポートセンター（TAC）にケースを作成するアクションは存在しません。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. リモートSyslogサーバへのログ送信</strong><br>
+            [cite_start]正しい。NAEスクリプト内で `ActionSyslog` を使用することで、検知したイベントや詳細情報をSyslogメッセージとして外部サーバーへ送信できます。これにより、既存のログ監視基盤と連携可能です [cite: 375-376]。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. クリティカルアラームレベルの設定</strong><br>
+            [cite_start]正しい。NAEの主要な機能は、条件合致時にWeb UI上のアラートステータスを変更することです。`AlertLevel.CRITICAL` などを設定することで、ダッシュボード上のグラフやステータス表示を赤色に変更し、管理者に異常を通知します [cite: 376-377]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. SNMPトラップ生成</strong><br>
+            間違い。AOS-CXのNAEフレームワークにおいて、SNMPトラップの生成は主要な標準アクションとして定義されていません（CLIコマンド実行アクションで `snmp-server trap ...` を叩くなどの回避策は考えられますが、ネイティブなアクションではありません）。</p>
+
+            <p><span class="status-icon">❌</span><strong>E. パケットキャプチャ</strong><br>
+            間違い。トラブルシューティングのためにキャプチャを行うことは可能ですが、設問の選択肢の中で「NAEの代表的なアクション」として挙げる場合、アラートレベル変更やSyslog送信が優先されます。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>NAEスクリプト（Python）の中で定義できる「アクション（自動実行タスク）」の標準的な機能セットを理解しているかが問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>NAE Actions:</strong>
+            - <strong>Alert Level Change:</strong> UI上のステータス変更（Normal, Minor, Major, Critical）。
+            - <strong>Syslog:</strong> メッセージ送信。
+            - <strong>CLI Command:</strong> 任意のコマンド実行。
+            - <strong>Shell Command:</strong> Bashシェル実行。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>NAEは「監視（Monitor）」→「条件（Condition）」→「アクション（Action）」で構成されます。「アラートレベルを変えてユーザーに知らせる」のが最も基本的なアクションです。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+# Pythonスクリプト例（アクション定義）
+if cpu_usage > 90:
+    self.set_alert_level(AlertLevel.CRITICAL)
+    self.action_syslog("CPU usage is critical!")
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q29">
+    <div class="question-header"><span class="question-badge">Q29</span>eBGPピアリングの設定要件</div>
+    <p>AS 65010のスイッチで、AS 65100の隣接デバイスとeBGPピアを確立するために必要な設定はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> remote-as 65100 を使用する</li>
+        <li data-opt="B"><span class="option-label">B.</span> next-hop-self を使用する</li>
+        <li data-opt="C"><span class="option-label">C.</span> 各ネイバーに対して router-id を使用する</li>
+        <li data-opt="D"><span class="option-label">D.</span> remote-as 65010 を使用する</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q29"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. remote-as 65100 を使用する</strong><br>
+            [cite_start]正しい。BGPにおいて、自AS（65010）と異なるAS番号（65100）を `remote-as` コマンドで指定することで、そのネイバーとの接続は自動的に「eBGP（External BGP）」として扱われます [cite: 385-386]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. next-hop-self を使用する</strong><br>
+            間違い。これはeBGPから学習したルートをiBGPネイバーに広告する際、Next Hop属性を到達可能な自分自身のアドレスに書き換えるための設定です。ピア確立そのものの必須要件ではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. 各ネイバーに対して router-id を使用する</strong><br>
+            間違い。Router-IDはBGPインスタンス全体で1つ設定する識別子です。ネイバーごとに個別に設定するものではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. remote-as 65010 を使用する</strong><br>
+            間違い。自ASと同じ番号を指定した場合、その接続は「iBGP（Internal BGP）」となります。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>BGPの基本的な設定コマンドと、AS番号によるiBGP/eBGPの動作モードの違いについての理解が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>BGPの基本:</strong>
+            - <strong>iBGP:</strong> 同じAS番号同士。TTL=255。ループ防止のためAS-PATH属性を変更しない。
+            - <strong>eBGP:</strong> 異なるAS番号同士。TTL=1（デフォルト）。AS-PATH属性に自ASを追加する。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>問題文：「eBGPピアを確立したい」「相手はAS 65100」。</li>
+                <li>設定コマンド：`neighbor <IP> remote-as <AS>`。</li>
+                <li>相手のAS番号を指定している選択肢を選ぶ。</li>
+            </ol>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+router bgp 65010
+    neighbor 10.1.1.2 remote-as 65100
+</div>
+        </div>
+    </details>
+</div>
+
+        <div class="question-card" id="q30">
+    <div class="question-header"><span class="question-badge">Q30</span>100 Gbpsリンクの物理仕様</div>
+    <p>2台のCXスイッチ間で100 Gbpsのリンクを計画しています。<br>
+    この要件に必要なポートタイプ（フォームファクタ）はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> SFP+</li>
+        <li data-opt="B"><span class="option-label">B.</span> QSFP28</li>
+        <li data-opt="C"><span class="option-label">C.</span> XSFP+</li>
+        <li data-opt="D"><span class="option-label">D.</span> QSFP+</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q30"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. SFP+</strong><br>
+            間違い。SFP+ (Small Form-factor Pluggable Plus) は、主に<strong>10 Gbps</strong>接続に使用される規格です。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. QSFP28</strong><br>
+            [cite_start]正しい。QSFP28 (Quad SFP 28) は、25 Gbpsのレーンを4本束ねることで<strong>100 Gbps</strong> (4 x 25G = 100G) の帯域幅を提供するフォームファクタです。現代のデータセンターネットワークにおいて、100Gイーサネット接続の標準的な物理インターフェースとして採用されています [cite: 394-395]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. XSFP+</strong><br>
+            間違い。一般的なイーサネットトランシーバの規格として、この名称は存在しないか、標準的ではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. QSFP+</strong><br>
+            間違い。QSFP+ (Quad SFP Plus) は、10 Gbpsのレーンを4本束ねて<strong>40 Gbps</strong> (4 x 10G = 40G) を提供する規格です。形状はQSFP28と同じですが、対応速度が異なります。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>イーサネットの帯域幅（速度）と、それに対応するトランシーバモジュールの物理規格（フォームファクタ）の正しい組み合わせを理解しているかが問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>トランシーバ規格と速度の対応:</strong><br>
+            - <strong>SFP:</strong> 1 Gbps<br>
+            - <strong>SFP+:</strong> 10 Gbps<br>
+            - <strong>SFP28:</strong> 25 Gbps<br>
+            - <strong>QSFP+:</strong> 40 Gbps (10G x 4)<br>
+            - <strong>QSFP28:</strong> 100 Gbps (25G x 4)<br>
+            - <strong>QSFP-DD:</strong> 400 Gbps (50G x 8 など)</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「100 Gbps」という要件に着目する。</li>
+                <li>「QSFP」は「Quad（4倍）」を意味する。</li>
+                <li>「28」は「約28Gbps（実効25Gbps）のシグナリング」を意味する。</li>
+                <li>25Gbps × 4 = 100Gbps となる「QSFP28」を選択する。</li>
+            </ol>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>QSFP+ポート（40G）にQSFP28モジュール（100G）を挿しても動作しません（逆も同様の場合が多いですが、一部のQSFP28ポートは40G互換モードを持っています）。物理形状が似ていても、スペック上の世代が異なるため注意が必要です。</p>
+        </div>
+    </details>
+</div>
+
+    </div>
+
+    <!-- ================= PAGE 4 (Q31-40) ================= -->
+    <div id="page-4" class="page-container">
+        
+        <!-- Q31 -->
+        <div class="question-card" id="q31">
+    <div class="question-header"><span class="question-badge">Q31</span>AP追加時のキャパシティ監視</div>
+    <p>顧客のCXスイッチはHPE Aruba Networking Centralで管理されています。<br>
+    最近、新しいAP-615アクセスポイントをいくつか接続しましたが、スイッチのキャパシティ（容量）の問題が発生した場合に通知を受けたいと考えています。<br>
+    どのアラートを有効にすべきですか。（2つ選択）</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> Switch Port Rx Rate（受信レート）</li>
+        <li data-opt="B"><span class="option-label">B.</span> Switch Uplink Port Usage（アップリンクポート使用率）</li>
+        <li data-opt="C"><span class="option-label">C.</span> Switch PoE Utilization（PoE使用率）</li>
+        <li data-opt="D"><span class="option-label">D.</span> Switch Port Tx Rate（送信レート）</li>
+        <li data-opt="E"><span class="option-label">E.</span> Switch Link Status Change（リンク状態変化）</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q31"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B, C</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A, D. Port Rx/Tx Rate</strong><br>
+            間違い。これらは個々のポートのトラフィック量を示しますが、AP追加に伴うスイッチ全体の「キャパシティ（許容量）」の枯渇を示す指標としては局所的すぎます。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. Switch Uplink Port Usage</strong><br>
+            [cite_start]正しい。APが増加すると、無線クライアントからのトラフィックがスイッチに集約され、コアスイッチやゲートウェイへ向かうアップリンク帯域を圧迫します。アップリンクの飽和はスイッチ全体のボトルネックとなるため、キャパシティプランニングにおいて最も重要な監視項目の一つです [cite: 404-405]。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. Switch PoE Utilization</strong><br>
+            [cite_start]正しい。AP-615などの無線APはPoE（Power over Ethernet）で動作します。スイッチ全体の給電能力（PoEバジェット）には上限があり、APを追加しすぎると電力不足に陥ります。PoE使用率はハードウェアリソースのキャパシティそのものです [cite: 406-407]。</p>
+
+            <p><span class="status-icon">❌</span><strong>E. Link Status Change</strong><br>
+            間違い。リンクのアップ/ダウンは「可用性」の監視であり、性能や容量（キャパシティ）の監視ではありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>無線APを増設する際に、アクセススイッチ側で枯渇しやすい2大リソース（帯域幅と電力）を特定し、Aruba Centralで適切な監視アラートを選択する能力が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Aruba Centralのアラートカテゴリ:</strong>
+            Centralではデバイスの健全性を監視するために多数のアラートが用意されています。「Capacity」に関連するアラートは、リソースが限界に近づいていることを予兆するものです。
+            - <strong>PoE Budget:</strong> スイッチの総給電能力。クラス4 (30W) やクラス6 (60W) のAPを多数接続すると急速に消費されます。
+            - <strong>Uplink Bandwidth:</strong> トラフィックの出口。オーバーサブスクリプション比率が高い場合、ここがボトルネックになります。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>APを追加すると何が消費されるか？ → 電力 (PoE) と 帯域 (Bandwidth)。</li>
+                <li>帯域が詰まるところはどこか？ → アクセスポートよりもアップリンクポート。</li>
+                <li>選択肢からこれらに合致するものを選ぶ。</li>
+            </ol>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q32">
+    <div class="question-header"><span class="question-badge">Q32</span>OSPFエリアタイプの選定</div>
+    <p>以下の設定を使用して、小規模なブランチサイトでOSPFを設定しました。このサイトでは、インターネットや他のサイトへ到達するために、単一のデフォルトルートのみを必要とします。<br>
+    しかし、ルーティングテーブルを確認すると、デフォルトルート以外にも他のOSPFルート（エリア間ルートなど）が表示されています。<br>
+    <code>router ospf 1</code><br>
+    <code> router-id 10.1.0.3</code><br>
+    <code> area 1 stub</code><br>
+    <code> exit</code><br>
+    <br>
+    要件を満たすために、どのOSPFエリアタイプを設定すべきですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> Stub Area</li>
+        <li data-opt="B"><span class="option-label">B.</span> Not-So-Stubby Area (NSSA)</li>
+        <li data-opt="C"><span class="option-label">C.</span> Totally Not-So-Stubby Area (Totally NSSA)</li>
+        <li data-opt="D"><span class="option-label">D.</span> Totally Stubby Area</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q32"></div>
+        <div class="explanation-content">
+            <p><strong>正解: D</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. Stub Area</strong><br>
+            [cite_start]間違い。現在の設定（`area 1 stub`）です。スタブエリアは外部ルート（LSA Type 5）を遮断しますが、エリア間ルート（LSA Type 3 / Summary LSA）は許可します。そのため、デフォルトルート以外に他のエリアのネットワーク情報も受信してしまいます [cite: 417, 420]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. Not-So-Stubby Area</strong><br>
+            間違い。NSSAはスタブエリアの一種ですが、エリア内から外部ルート（Type 7）を再配布できるようにしたものです。外部からのType 5は遮断しますが、Type 3は通すため、要件を満たしません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. Totally Not-So-Stubby Area</strong><br>
+            間違い。Totally Stubbyと同様にType 3も遮断しますが、同時にASBR配置（Type 7生成）を許可する設定です。設問には「ASBRが必要」という要件はないため、より単純なTotally Stubbyが最適解です。</p>
+
+            <p><span class="status-icon">✅</span><strong>D. Totally Stubby Area</strong><br>
+            [cite_start]正しい。トータリースタブエリアは、外部ルート（Type 5）だけでなく、エリア間ルート（Type 3）も遮断します。エリア外への通信手段として、ABRが生成する「デフォルトルート」のみを受け取ります。これにより、ルーティングテーブルを最小化したいという要件を満たせます [cite: 423-424]。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>OSPFの各エリアタイプがフィルタリングするLSAの種類と、ルーティングテーブルへの影響（「デフォルトルートのみ」にする方法）が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>OSPFエリアタイプとLSAフィルタ:</strong><br>
+            - <strong>Standard:</strong> 全LSAを許可。<br>
+            - <strong>Stub:</strong> Type 5 (External) をブロック。Default Routeを注入。<br>
+            - <strong>Totally Stubby:</strong> Type 5 と Type 3 (Summary) をブロック。Default Routeのみ注入。<br>
+            - <strong>NSSA:</strong> Type 5 をブロックするが、Type 7 で外部ルート生成可。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! Totally Stubby Areaの設定 (ABR側で設定)
+router ospf 1
+    area 1 stub no-summary
+! ※ "no-summary" キーワードが Totally Stubby を意味する
+</div>
+        </div>
+    </details>
+</div>
+
+        <!-- Q33 -->
+        <div class="question-card" id="q33">
+    <div class="question-header"><span class="question-badge">Q33</span>VSX NTP設定の同期</div>
+    <p>VSX環境のスイッチ設定を確認したところ、NTPサーバーの設定がPrimaryスイッチには存在しますが、SecondaryスイッチのRunning Configurationには表示されていません。<br>
+    両方のノードで同じNTP設定を持つようにするために、VSX設定をどのように変更すべきですか。</p>
+    <div class="code-block">
+Core-2(config# show running-config | begin vsx
+vsx
+    system-mac 06:02:10:00:02:00
+    inter-switch-link lag 256
+    role secondary
+    vsx-sync stp-global vsx-global
+!
+!
+https-server vrf mgmt
+</div>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> SecondaryスイッチのVSX設定で <code>vsx-sync time</code> を追加する。</li>
+        <li data-opt="B"><span class="option-label">B.</span> PrimaryスイッチのVSX設定で <code>vsx-sync time</code> を追加する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> PrimaryスイッチのVSX設定で <code>vsx-sync ntp</code> を追加する。</li>
+        <li data-opt="D"><span class="option-label">D.</span> SecondaryスイッチのVSX設定で <code>vsx-sync ntp</code> を追加する。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q33"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A, D. Secondaryスイッチでの設定</strong><br>
+            間違い。VSXの設定同期（Config Sync）機能は、Primaryスイッチ（Configマスター）からSecondaryスイッチへの一方向の同期を行います。したがって、同期対象を指定するコマンドはPrimaryスイッチ側で実行する必要があります。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. Primaryスイッチで <code>vsx-sync time</code> を追加</strong><br>
+            [cite_start]正しい。AOS-CXにおいて、NTPサーバー設定やタイムゾーン設定を同期するためのキーワードは `time` です。`vsx-sync time` をPrimaryのVSXコンテキストで設定することで、これらの設定がSecondaryへ自動的に複製されます [cite: 440-442]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. <code>vsx-sync ntp</code> を追加</strong><br>
+            間違い。直感的には `ntp` と入力したくなりますが、AOS-CXのCLI構文としては `time` が正しいキーワードです（バージョンにより `ntp` が存在する場合もありますが、標準的な解答としては `time` が採用されます）。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>VSX同期（Config Sync）の仕様（Primary主導）と、特定の機能（NTP/時刻）を同期させるための正しいCLI構文が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>VSX Config Sync:</strong> グローバル設定の一部（AAA, NTP, DNS, Tacacs等）をPrimaryからSecondaryへ同期し、設定漏れを防ぐ機能。
+            コマンド: `vsx-sync <feature-name>` (例: `access-list`, `aaa`, `time`, `dns`)</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! Primaryスイッチでの設定
+vsx
+    vsx-sync time
+! 同期状態の確認
+show vsx status config-sync
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q34">
+    <div class="question-header"><span class="question-badge">Q34</span>GatewayなしのIoTセグメンテーション</div>
+    <p>顧客は、ゲートウェイ（コントローラ）を使用せずに、複数のCXスイッチ間でIoTトラフィックをセグメント化したいと考えています。<br>
+    IoTデバイス同士の通信は許可しつつ、他のトラフィックとは分離する必要があります。<br>
+    推奨されるトンネリングオプションはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> IPSec</li>
+        <li data-opt="B"><span class="option-label">B.</span> VNBT (Virtual Network Based Tunneling)</li>
+        <li data-opt="C"><span class="option-label">C.</span> UBT (User Based Tunneling)</li>
+        <li data-opt="D"><span class="option-label">D.</span> GRE</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q34"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. IPSec</strong><br>
+            間違い。IPSecは暗号化を提供しますが、キャンパス内でのセグメンテーション（仮想ネットワーク分離）用途としては一般的ではなく、管理負荷も高くなります。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. VNBT (Virtual Network Based Tunneling)</strong><br>
+            [cite_start]正しい。VNBTは、Aruba Central NetConductorなどのソリューションにおいて、EVPN-VXLAN技術を用いてスイッチ間（VTEP間）にオーバーレイネットワークを構築するアプローチを指します。これにより、物理的なゲートウェイアプライアンスを経由することなく（コントローラレスで）、スイッチ網だけで論理的なセグメント（VN）分離を実現できます [cite: 452-453]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. UBT</strong><br>
+            間違い。UBT (User Based Tunneling) は、トラフィックを「Aruba Gateway（コントローラ）」へトンネリングする技術です。設問には「ゲートウェイを使用せずに（without using a Gateway）」とあるため、要件を満たしません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. GRE</strong><br>
+            間違い。GREはトンネリングプロトコルですが、それ単体ではスケーラブルなセグメンテーション管理（自動化されたVNの構成）を提供しません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>「ゲートウェイ不要（＝コントローラレス）」で「セグメンテーション」を実現するための、モダンなオーバーレイ技術（VXLANベース）を選択できるかが問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Centralized Overlay (UBT):</strong> Access Switch -> Gateway。Gatewayでポリシー適用。<br>
+            <strong>Distributed Overlay (VNBT/VXLAN):</strong> Access Switch -> Access/Agg Switch。ファブリック全体でポリシー適用。Gatewayアプライアンスは必須ではない。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「Gatewayなし」→ UBTは除外。</li>
+                <li>「スイッチ間でセグメント化」→ VXLAN/EVPN技術の出番。</li>
+                <li>選択肢の中でそれに該当する名称は「VNBT」。（Aruba用語としてVXLANによる仮想ネットワークを指す）</li>
+            </ol>
+        </div>
+    </details>
+</div>
+
+        <!-- Q35 -->
+        <div class="question-card" id="q35">
+    <div class="question-header"><span class="question-badge">Q35</span>NAEスクリプトのダウンロード元</div>
+    <p>CXスイッチのWeb UIから直接NAE (Network Analytics Engine) エージェントスクリプトをダウンロードできるソースはどこですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> Aruba Solutions Exchange (ASE)</li>
+        <li data-opt="B"><span class="option-label">B.</span> HPE Networking Support Portal</li>
+        <li data-opt="C"><span class="option-label">C.</span> Airheads Community</li>
+        <li data-opt="D"><span class="option-label">D.</span> Github Community</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q35"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. Aruba Solutions Exchange (ASE)</strong><br>
+            [cite_start]正しい。AOS-CXのWeb UI（NAEダッシュボード）には、Aruba Solutions Exchange (ASE) と連携する機能が組み込まれています。スイッチがインターネットに接続されていれば、UI上のボタンをクリックするだけで、ASEで公開されている公式およびコミュニティ提供のNAEスクリプトを検索・ダウンロード・インストールすることができます [cite: 459, 461, 462]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. HPE Networking Support Portal</strong><br>
+            間違い。ファームウェアやドキュメントの入手元ですが、スイッチUIから直接NAEスクリプトを取り込む連携機能はありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. Airheads Community</strong><br>
+            間違い。ユーザーフォーラムであり、スクリプトの議論は行われますが、UI連携されたリポジトリではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. Github Community</strong><br>
+            間違い。多くのスクリプトが開発者によってGitHubで公開されていますが、スイッチのWeb UI標準機能として「ワンクリックでダウンロード」できるデフォルトの接続先はASEです。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>AOS-CXの運用機能（NAE）において、スクリプトの入手とデプロイを簡略化するための統合機能（ASE連携）を知っているかが問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Aruba Solutions Exchange (ASE):</strong> Aruba製品の設定やスクリプトを動的に生成・共有するためのプラットフォーム。AOS-CXのNAE機能と密接に統合されています。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>インターネット接続がない閉域網環境ではASE連携が使えないため、PCでASEからダウンロードしたファイルをWeb UI経由で手動アップロードする必要があります。</p>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q36">
+    <div class="question-header"><span class="question-badge">Q36</span>リモートパケットキャプチャ</div>
+    <p>CXスイッチ上でパケットキャプチャを実行し、その完全な内容（フルパケット）をリモートデバイス上でリアルタイムに表示・確認したいと考えています。<br>
+    これを行うための最良の方法はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> Wiresharkを実行しているコンピュータへのERSPANを使用したミラーセッションを設定する</li>
+        <li data-opt="B"><span class="option-label">B.</span> CPUへのミラーセッションを設定し、tsharkを使用してPCAPファイルにキャプチャする</li>
+        <li data-opt="C"><span class="option-label">C.</span> スイッチ上の別のポートを宛先とするローカルミラーセッションを設定する</li>
+        <li data-opt="D"><span class="option-label">D.</span> tcpdumpを使用してスイッチ上でリアルタイムにパケットサマリを検査する</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q36"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. ERSPANを使用したミラーリング</strong><br>
+            [cite_start]正しい。ERSPAN (Encapsulated Remote SPAN) は、ミラーリングしたパケットをGREでカプセル化し、L3ネットワークを超えてリモートの宛先（Wireshark端末など）へ転送する技術です。これにより、現場に行かずに自席のPCでリアルタイムかつ完全なパケット解析が可能になります [cite: 468, 471]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. CPUへのミラーとtshark</strong><br>
+            間違い。CPUへのミラーリングはCoPP（Control Plane Policing）の影響を受けやすく、大量のトラフィックを処理できません（パケットドロップが発生します）。また、PCAPファイルへの保存は「リアルタイム表示」ではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. ローカルミラー</strong><br>
+            間違い。スイッチに直接PCを接続する必要があるため、「リモートデバイスで」という要件を満たしません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. tcpdump</strong><br>
+            間違い。tcpdumpはCLI上で簡易的な解析を行うには便利ですが、ヘッダ情報が主であり、WiresharkのようなGUIでの「完全なパケットのリアルタイム詳細解析」には向きません。また、CPU負荷の懸念もあります。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>トラブルシューティング時に、遠隔地からトラフィックの中身を詳細に調査するための技術（ERSPAN）の選定能力が問われています。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「リモートで見る」→ ローカルミラー(C)は除外。</li>
+                <li>「リアルタイムに完全なキャプチャ」→ ファイル保存(B)や簡易表示(D)は除外。</li>
+                <li>L3ネットワーク経由でパケットを転送できるERSPAN(A)が最適。</li>
+            </ol>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! ERSPANの設定例
+mirror session 1
+    source interface 1/1/1 both
+    destination tunnel 10.0.0.100 source 10.0.0.1
+    enable
+</div>
+        </div>
+    </details>
+</div>
+
+        <!-- Q37 -->
+        <div class="question-card" id="q37">
+    <div class="question-header"><span class="question-badge">Q37</span>IGMPバージョンの設定読み取り</div>
+    <p>HPE Aruba Networking CXスイッチで以下のIGMP設定が行われています：<br>
+<div class="code-block">
+interface vlan 2222
+ ip address 10.216.12.1/24
+ ip pim-sparse enable
+ ip igmp enable
+ ip igmp version 2
+exit
+</div>
+    <br>
+    作成された設定について正しい記述はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> ローカルL3ルーティングにはPIMプロトコルが必須である。</li>
+        <li data-opt="B"><span class="option-label">B.</span> IGMPバージョンはカスタム値（非デフォルト値）として設定されている。</li>
+        <li data-opt="C"><span class="option-label">C.</span> ローカルL2転送にはPIMプロトコルが必須である。</li>
+        <li data-opt="D"><span class="option-label">D.</span> IGMPバージョンはデフォルト値として設定されている。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q37"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. ローカルL3ルーティングにはPIMプロトコルが必須</strong><br>
+            間違い。PIMはマルチキャストパケットをルーター間で転送するためのプロトコルですが、この設問の意図は「表示されている設定コマンドの意味」を問うものです。PIMの有効化自体は設定されていますが、最も特筆すべき構成上の特徴（デフォルトとの差分）はIGMPバージョンにあります。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. IGMPバージョンはカスタム値として設定されている</strong><br>
+            [cite_start]正しい。AOS-CXのIGMPデフォルトバージョンは「v3」です。設定に <code>ip igmp version 2</code> が明記されているということは、管理者が意図的にデフォルトを変更した（カスタム設定を行った）ことを意味します [cite: 486-488]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. ローカルL2転送にはPIMプロトコルが必須</strong><br>
+            間違い。L2スイッチング（VLAN内転送）にはPIMは不要です。IGMP Snoopingのみで制御可能です。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. IGMPバージョンはデフォルト値</strong><br>
+            間違い。AOS-CXのデフォルトはv3であり、v2ではありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>AOS-CXのデフォルト設定値（特にIGMPバージョン）に関する知識と、コンフィグ出力から意図的な変更点を読み取る能力が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>IGMP Default Version:</strong> AOS-CXでは、Source Specific Multicast (SSM) をサポートするIGMPv3がデフォルトで有効になります。レガシーなクライアントやアプリケーションとの互換性のためにv2へダウングレードする場合、明示的な設定が必要です。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! IGMPバージョンの確認
+show ip igmp interface vlan 2222
+! 出力例: "IGMP Version: 2"
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q38">
+    <div class="question-header"><span class="question-badge">Q38</span>10 Gbpsリンクの物理仕様</div>
+    <p>2台のCXスイッチ間で10 Gbpsのリンクを計画しています。<br>
+    この要件に必要なポートタイプ（フォームファクタ）はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> QSFP+</li>
+        <li data-opt="B"><span class="option-label">B.</span> SFP</li>
+        <li data-opt="C"><span class="option-label">C.</span> SFP+</li>
+        <li data-opt="D"><span class="option-label">D.</span> SFP28</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q38"></div>
+        <div class="explanation-content">
+            <p><strong>正解: C</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. QSFP+</strong><br>
+            間違い。QSFP+ (Quad SFP Plus) は、10Gbpsレーンを4本束ねた<strong>40 Gbps</strong>用の規格です。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. SFP</strong><br>
+            間違い。SFP (Small Form-factor Pluggable) は、<strong>1 Gbps</strong>用の規格です。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. SFP+</strong><br>
+            [cite_start]正しい。SFP+ (Small Form-factor Pluggable Plus) は、<strong>10 Gbps</strong>イーサネット接続の業界標準規格です [cite: 495-496]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. SFP28</strong><br>
+            間違い。SFP28は<strong>25 Gbps</strong>用の規格です。物理形状はSFP/SFP+と同じであり、多くのSFP28ポートでSFP+モジュール（10G）を使用可能ですが、10Gbps専用のフォームファクタ名称としてはSFP+が正解です。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>イーサネットの帯域幅と、それに対応するトランシーバモジュールの物理規格の対応関係を理解しているかが問われています。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>以下の対応関係を暗記しておきましょう。<br>
+            - <strong>SFP</strong> = 1G<br>
+            - <strong>SFP+</strong> = 10G<br>
+            - <strong>SFP28</strong> = 25G<br>
+            - <strong>QSFP+</strong> = 40G<br>
+            - <strong>QSFP28</strong> = 100G</p>
+        </div>
+    </details>
+</div>
+
+        <!-- Q39 -->
+        <div class="question-card" id="q39">
+    <div class="question-header"><span class="question-badge">Q39</span>DURトラブルシューティング</div>
+    <p>あなたは同僚のエンジニアを支援して、CXスイッチとClearPass間の新しいDUR (Downloadable User Role) 設定のトラブルシューティングを行っています。<br>
+    スイッチ側の設定で検証すべき項目はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> SNMPコミュニティ文字列</li>
+        <li data-opt="B"><span class="option-label">B.</span> User-role設定</li>
+        <li data-opt="C"><span class="option-label">C.</span> Trust Anchor (TA) プロファイル</li>
+        <li data-opt="D"><span class="option-label">D.</span> HTTPSクライアント証明書</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q39"></div>
+        <div class="explanation-content">
+            <p><strong>正解: C</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. SNMP</strong><br>
+            間違い。DURのダウンロードプロセスはHTTPS (TCP 443) を使用します。SNMPは監視用プロトコルであり、ロール情報の取得には関与しません。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. User-role設定</strong><br>
+            間違い。DURの目的は「ユーザーロールの設定そのものをClearPassから動的にダウンロードする」ことにあります。したがって、スイッチ側に事前にロール設定（`user-role <name>`）が存在しないことは正常であり、検証すべきエラー原因ではありません。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. Trust Anchor (TA) プロファイル</strong><br>
+            [cite_start]正しい。スイッチがClearPassから役割情報（Role）をHTTPSでダウンロードする際、ClearPassサーバーが提示するSSLサーバー証明書を検証する必要があります。この検証を成功させるためには、その証明書を発行した認証局（CA）のルート証明書を、スイッチの「Trust Anchor (TA) Profile」として事前にインポートしておく必要があります。これが欠けているとSSLハンドシェイクが失敗し、ダウンロードできません [cite: 506-508]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. HTTPSクライアント証明書</strong><br>
+            間違い。通常、DURの通信においてスイッチ側がクライアント証明書を提示する相互認証（mTLS）までは求められません（ClearPass側の設定次第ですが、基本要件としてはTAプロファイルによるサーバー認証が先決です）。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>DUR (Downloadable User Role) 機能が動作するための前提条件である、PKI（公開鍵基盤）と証明書信頼チェーンの設定要件が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Downloadable User Role (DUR):</strong> ClearPass上で定義したロール設定（ACLやVLAN等）を、認証成功時にスイッチへプッシュする機能。<br>
+            <strong>Trust Anchor (TA):</strong> スイッチがSSL接続先（ClearPass）を信頼するためのルート証明書ストア。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! TAプロファイルの確認
+show crypto pki ta-profile
+! DURの設定確認
+show port-access role clearpass
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q40">
+    <div class="question-header"><span class="question-badge">Q40</span>VSX ISLPの機能</div>
+    <p>HPE Aruba Networking VSXにおける ISLP (Inter-Switch Link Protocol) の機能についての説明として正しいものはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> ISLPはL3接続を利用してスイッチ設定の同期を行う。</li>
+        <li data-opt="B"><span class="option-label">B.</span> ISLPはRPVST+などのプロトコル状態を定期的に同期する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> ISLPを使用するにはVSX用にルーテッドポートを有効にする必要がある。</li>
+        <li data-opt="D"><span class="option-label">D.</span> ISLPはLACPなどのプロトコル状態を定期的に同期する。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q40"></div>
+        <div class="explanation-content">
+            <p><strong>正解: D</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. L3接続で設定同期</strong><br>
+            間違い。ISLPはISL（L2トランク）上を流れる独自プロトコルです。L3接続（Keepaliveリンク）はスプリットブレイン検知のために使用されます。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. RPVST+同期</strong><br>
+            間違い。VSXにおいて、STP（スパニングツリー）の状態同期は限定的あるいは独立動作が基本です。ISLPがRPVST+の状態そのものを常に全同期しているわけではありません（MSTP構成でインスタンス0を同期させるケースなどはありますが、設問の意図としてはDがより正確な主要機能です）。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. ルーテッドポート必須</strong><br>
+            間違い。ISLリンクはLAGインターフェース（L2）として設定されます。ルーテッドポートではありません。</p>
+
+            <p><span class="status-icon">✅</span><strong>D. ISLPはLACPなどのプロトコル状態を定期的に同期する</strong><br>
+            [cite_start]正しい。ISLP (Inter-Switch Link Protocol) の主要な役割は、MCLAG（Multi-Chassis LAG）を実現するために、コントロールプレーン情報を同期することです。これには、ARPテーブル、MACアドレステーブル、IGMPグループ情報、そして**LACPステート**が含まれます。これにより、接続されたダウンリンクデバイスに対して、2台のスイッチが論理的に1台であるかのように振る舞うことができます [cite: 519-520]。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>VSXアーキテクチャの中核であるISLPプロトコルの役割と、同期対象となる情報の種類（LACP状態など）についての理解が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>ISLPの役割:</strong> VSXペア間で「脳」を同期させる神経のようなもの。ISLリンク（大容量LAG）上を専用のカプセル化パケットで流れます。<br>
+            <strong>同期されるもの:</strong> LACP状態、ARP/NDキャッシュ、MACテーブル、IGMPスヌーピング情報など。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>ISLPが切れるとコントロールプレーンの同期が止まり、スプリットブレイン状態（両方がMaster）になるリスクがあります。これを防ぐのがKeepaliveリンクです。</p>
+        </div>
+    </details>
+</div>
+
+   </div>
+
+    <!-- ================= PAGE 5 (Q41-50) ================= -->
+    <div id="page-5" class="page-container">
+        
+        <!-- Q41 -->
+        <div class="question-card" id="q41">
+    <div class="question-header"><span class="question-badge">Q41</span>VSFメンバーの故障交換手順</div>
+    <p>VSFスタック構成（4メンバー）において、Member ID 2のスイッチがハードウェア障害により停止しました。<br>
+    あなたは同じモデルの交換用スイッチを用意しました。Member 2の設定を復元し、正常にスタックへ復帰させるための最も効率的かつ推奨される手順はどれですか。</p>
+   <div class="code-block">
+interface vlan 2222
+ ip address 10.216.12.1/24
+ ip pim-sparse enable
+ ip igmp enable
+ ip igmp version 2
+exit
+</div>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 交換用スイッチを工場出荷時設定（デフォルト）の状態で物理接続し、電源を入れる。</li>
+        <li data-opt="B"><span class="option-label">B.</span> 交換用スイッチに手動でVSFリンク設定とMember ID 2の設定を行ってから接続する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> Conductorスイッチで <code>vsf replace member 2</code> コマンドを実行し、新しいMACアドレスを指定する。</li>
+        <li data-opt="D"><span class="option-label">D.</span> 交換用スイッチを接続し、Conductorスイッチから設定ファイルをTFTPでプッシュする。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q41"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. 工場出荷時設定で物理接続し、電源ON</strong><br>
+            [cite_start]正しい。VSFには「Auto-Stacking」または「Zero Touch Provisioning」機能があります。Conductor（マスター）上にMember 2の設定情報（プロビジョニング構成）が残っていれば、同じモデルの工場出荷状態のスイッチをVSFリンクポートに接続して起動するだけで、Conductorがそれを検出し、自動的にMember 2として設定を同期・再起動させます [cite: 528-530]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. 手動設定してから接続</strong><br>
+            間違い。手動設定を行うと、Conductorとの構成不一致（MACアドレスの違いや競合）が発生する可能性があります。自動プロビジョニングに任せるのが推奨手順です。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. vsf replace memberコマンド</strong><br>
+            間違い。そのようなコマンドはAOS-CXの標準的な運用フローには存在しません（物理交換時のMACアドレス更新は自動プロセス、または <code>vsf member 2 type ...</code> の再設定で行われますが、通常は自動検知を利用します）。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. TFTPでプッシュ</strong><br>
+            間違い。VSFメンバーの設定はConductorが一元管理しており、個別にTFTP転送する必要はありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>VSFスタック運用における障害対応（RMA交換）の手順と、自動化機能（Auto-Stacking）の理解が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>VSF Member Replacement:</strong> 故障交換時、Config上には <code>vsf member 2 type &lt;model&gt;</code> という定義が残っています。新しいスイッチが接続されると、VSFはこの定義と一致するハードウェア（かつ未設定のもの）を自動的にMember 2として取り込みます。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>交換用スイッチが新品でない（他の設定が入っている）場合は、必ず事前に初期化（<code>erase startup-config</code>）しておく必要があります。</p>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q42">
+    <div class="question-header"><span class="question-badge">Q42</span>VSXのソフトウェアアップグレード</div>
+    <p>VSXペア（PrimaryとSecondary）のAOS-CXソフトウェアをアップグレードする必要があります。<br>
+    ダウンタイムとトラフィック損失を最小限に抑えるために、Arubaが推奨するCLIベースの手法はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 両方のスイッチにイメージをコピーし、同時に <code>boot system</code> コマンドを実行する。</li>
+        <li data-opt="B"><span class="option-label">B.</span> Primaryスイッチから <code>vsx update-software</code> コマンドを実行する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> NetEditを使用して、オーケストレーションアップグレードを実行する。</li>
+        <li data-opt="D"><span class="option-label">D.</span> Secondaryスイッチを再起動し、復帰後にPrimaryスイッチを手動で再起動する。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q42"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. 同時再起動</strong><br>
+            間違い。両方のスイッチが同時にダウンするため、ネットワーク全体が停止します。VSXの冗長性を活かしていません。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. <code>vsx update-software</code> コマンド</strong><br>
+            正しい。このコマンド（Live Upgrade機能）を使用すると、自動的に以下のプロセスが順次実行され、通信断を最小化します。<br>
+            1. SecondaryにイメージをDLして再起動。<br>
+            2. Secondary復帰後、プロトコル状態やARP/MACを同期。<br>
+            3. Primaryが再起動（トラフィックはSecondaryへ迂回）。<br>
+            [cite_start]これにより、手動で行う複雑な手順を1行のコマンドで安全に実行できます [cite: 538-540]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. NetEditを使用</strong><br>
+            間違い。NetEditも優れたツールであり、同様のローリングアップグレードが可能ですが、設問が「CLIベースの手法（CLI-based method）」を求めている場合、または選択肢の中で最もネイティブな機能を問う場合は <code>vsx update-software</code> が正解となります（ただし、NetEditも推奨される方法の一つです。文脈に注意）。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. 手動での順次再起動</strong><br>
+            間違い。手順としては論理的に正しいですが、ARPテーブルの事前同期やリンクのシャットダウンなどの細かい制御を手動で行う必要があり、ミスが発生しやすいため、自動化コマンド（B）が推奨されます。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>VSXの高可用性を維持したままOSアップデートを行うための専用コマンド（VSX Live Upgrade）を知っているかが問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>VSX Live Upgrade:</strong> Primaryで実行します。イメージファイルをTFTP/SFTPサーバーから指定するか、すでにPrimaryにアップロード済みのイメージを使用できます。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! VSX Live Upgradeの実行（Primaryで実行）
+vsx update-software tftp://10.0.0.10/ArubaOS-CX_10.10.xxxx.swi
+</div>
+        </div>
+    </details>
+</div>
+
+        <!-- Q43 -->
+        <div class="question-card" id="q43">
+    <div class="question-header"><span class="question-badge">Q43</span>DHCP Snoopingの設定範囲</div>
+    <p>展示（Exhibit）を参照してください。<br>
+    <img src="images/Q43.png" alt="Q43" class="question-image">
+    SW-Aは以下のLayer-3ゲートウェイとして機能しています：<br>
+    - VLAN 100のServer-A（サブネット 10.100.100.0/24）<br>
+    - VLAN 20のClient-A（サブネット 10.100.20.0/24）<br>
+    - VLAN 30のClient-B（サブネット 10.100.30.0/24）<br>
+    <br>
+    SW-A上のVLAN 20において、不正なDHCPサーバー（Rogue DHCP Server）を防ぐために実施すべき設定はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> VLAN 20で <code>dhcpv4-snooping authorized-server 10.100.100.10</code> を有効にする。</li>
+        <li data-opt="B"><span class="option-label">B.</span> <code>dhcpv4-snooping</code> をグローバルおよびVLAN 20で有効にする。</li>
+        <li data-opt="C"><span class="option-label">C.</span> <code>dhcpv4-snooping</code> をグローバルおよびインターフェースVLAN 20で有効にする。</li>
+        <li data-opt="D"><span class="option-label">D.</span> VLAN 20で <code>dhcpv4-snooping trust 10.100.100.10</code> を有効にする。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q43"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. authorized-server コマンド</strong><br>
+            間違い。AOS-CXにおいて `authorized-server` コマンドは、信頼できるDHCPサーバーのIPアドレスを指定して検証する追加機能ですが、これを設定するだけではスヌーピング自体は有効になりません。まず機能の有効化が必要です。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. dhcpv4-snooping をグローバルおよびVLAN 20で有効にする</strong><br>
+            [cite_start]正しい。DHCP Snoopingを動作させるための必須手順は、(1) グローバルコンフィグレーションで機能を有効にする、(2) 対象となるVLANコンテキストで有効にする、の2段階です。これにより、信頼されていないポート（Untrusted Port）からのDHCPサーバー応答（OFFER/ACK）が破棄され、不正なサーバーを防ぐことができます [cite: 1289]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. インターフェースVLANでの有効化</strong><br>
+            間違い。DHCP SnoopingはL2機能（VLAN全体でのフラッディング制御）であるため、設定箇所は「VLANインターフェース（SVI）」ではなく「VLAN定義（vlan context）」です。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. trust 設定</strong><br>
+            間違い。`trust` 設定は物理インターフェース（正規のDHCPサーバーが接続されているポートやアップリンク）に対して行うものです。IPアドレスに対して直接trustを設定するコマンドではありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>不正なDHCPサーバーを排除するセキュリティ機能「DHCP Snooping」の、AOS-CXにおける正しい有効化手順（グローバル設定＋VLAN設定）が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>DHCP Snooping:</strong><br>
+            - <strong>Untrusted Port:</strong> クライアントからのリクエストのみ許可。サーバーからの応答はブロック。<br>
+            - <strong>Trusted Port:</strong> 全てのDHCPパケットを許可。<br>
+            設定手順：`dhcp-snooping` (Global) → `dhcp-snooping` (VLAN) → `dhcp-snooping trust` (Interface)。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! 設定例
+dhcp-snooping
+vlan 20
+    dhcp-snooping
+interface 1/1/1
+    dhcp-snooping trust
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q44">
+    <div class="question-header"><span class="question-badge">Q44</span>長距離MMFリンクの設計</div>
+    <p>展示（Exhibit）を参照してください。<br>
+    <img src="images/Q44.png" alt="Q44" class="question-image">
+    上級ネットワークアーキテクトが作成した構成図があります。あなたはビルディングAとCの間にこの構成を実装しようとしています。<br>
+    ビル間の実際のファイバー距離は <strong>350m (1,148ft)</strong> であり、<strong>OM4ケーブル</strong>を使用しています。<br>
+    実際の環境条件に基づいて、インストールを完了するために構成の何を変更する必要がありますか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 300m以上の距離をサポートするため、10SR光学モジュールを25SRに変更する。</li>
+        <li data-opt="B"><span class="option-label">B.</span> 300m以上の距離をサポートするため、10SR光学モジュールを25LRに変更する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> 300m以上の距離をサポートするため、10SR光学モジュールを10LRに変更する。</li>
+        <li data-opt="D"><span class="option-label">D.</span> 400m (1312ft) までの距離をサポートするため、10SR光学モジュールを 10SR / MMF C-Class XCVR OM4 に変更する。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q44"></div>
+        <div class="explanation-content">
+            <p><strong>正解: D</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. 25SRへの変更</strong><br>
+            間違い。25GBASE-SRの伝送距離は、OM4ケーブルを使用しても通常100m（またはFECありで若干延長）程度であり、350mの距離には適していません。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. 25LRへの変更</strong><br>
+            間違い。LR（Long Range）モジュールはシングルモードファイバー（SMF）用です。既設のケーブルがOM4（マルチモード）であるため、物理的に適合しません。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. 10LRへの変更</strong><br>
+            間違い。これも同様にSMF用であるため、OM4ケーブルでは使用できません。</p>
+
+            <p><span class="status-icon">✅</span><strong>D. 10SR / MMF C-Class XCVR OM4 に変更する</strong><br>
+            [cite_start]正しい。10GBASE-SRの規格上の伝送距離は、OM3ケーブルでは最大300mですが、<strong>OM4ケーブルを使用することで最大400m</strong>まで延長されます。設問の距離は350mであり、OM3の限界を超えていますが、OM4の仕様範囲内です。したがって、OM4対応の適切な10G SRトランシーバーを使用することで要件を満たせます [cite: 1316-1317]。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>光ファイバーの種類（OM3 vs OM4）と、それぞれの規格における10GBASE-SRの伝送可能距離（300m vs 400m）の違いを正しく理解しているかが問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>10GBASE-SR 距離制限:</strong><br>
+            - <strong>OM1 (62.5μm):</strong> 33m<br>
+            - <strong>OM2 (50μm):</strong> 82m<br>
+            - <strong>OM3 (50μm LOMMF):</strong> 300m<br>
+            - <strong>OM4 (50μm LOMMF):</strong> 400m<br>
+            ※LR (Long Range) はSMF用で10kmまで対応。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>距離: 350m。ケーブル: OM4。</li>
+                <li>OM3なら300mまでNG。OM4なら400mまでOK。</li>
+                <li>既存設計が10SR（Multimode）。</li>
+                <li>ケーブルがOM4なので、10SRのまま（あるいはOM4対応を明示して）使用すれば届く。</li>
+                <li>LRや25G SRなどの選択肢は、ケーブル不一致や距離不足で除外。</li>
+            </ol>
+        </div>
+    </details>
+</div>
+
+        <!-- Q45 -->
+        <div class="question-card" id="q45">
+    <div class="question-header"><span class="question-badge">Q45</span>erase all zeroizedコマンドの動作</div>
+    <p>スイッチの構成をクリアするために、コマンド <code>erase all zeroized</code> を実行しました。<br>
+    このタスクの結果として正しいものはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> スイッチはセキュアイレースタスクを実行し、startup-configを削除しますが、管理者資格情報のパスワードは保持します。</li>
+        <li data-opt="B"><span class="option-label">B.</span> スイッチはセキュアイレースタスクを実行し、すべての顧客データを削除します。これには最大1時間かかる場合があります。</li>
+        <li data-opt="C"><span class="option-label">C.</span> スイッチはすべてのユーザー資格情報をクリアしますが、running-configは保持します。</li>
+        <li data-opt="D"><span class="option-label">D.</span> スイッチは、工場出荷時にインストールされていたAOS-CXイメージを復元します。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q45"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. パスワード保持</strong><br>
+            間違い。<code>zeroized</code> オプションは「完全消去」を目的としているため、管理者パスワードを含むいかなる設定情報も保持しません。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. 全データ削除・長時間実行</strong><br>
+            [cite_start]正しい。<code>erase all zeroized</code> コマンドは、ストレージデバイス上のすべてのデータを物理的に上書き（サニタイズ）するセキュアイレースプロセスを実行します。これには構成ファイル、ログ、コアダンプ、および顧客データが含まれ、NISTなどのセキュリティ基準に準拠した廃棄や譲渡前の初期化に使用されます。ディスクサイズによっては完了までに最大1時間程度かかる場合があります [cite: 596-599]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. running-config保持</strong><br>
+            間違い。すべての設定が削除され、再起動後は工場出荷時設定（デフォルト）になります。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. 工場出荷時イメージの復元</strong><br>
+            間違い。このコマンドは「データ」を消去するものであり、OSイメージ自体を工場出荷時の古いバージョンにダウングレードする機能ではありません（現在のイメージで初期化されます）。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>スイッチを廃棄・返却する際に個人情報や機密情報を完全に消去するためのコマンド（Zeroization）の挙動と影響（所要時間）が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>Zeroization (ゼロ化):</strong> メモリやストレージに0やランダムデータを書き込み、磁気的・物理的にデータを復元不可能にする処理。<br>
+            <strong>AOS-CXのeraseコマンド:</strong>
+            - <code>erase startup-config</code>: 設定のみ削除。
+            - <code>erase all</code>: 設定とデータ削除。
+            - <code>erase all zeroized</code>: 完全なデータサニタイズ（時間がかかる）。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>「Zeroized」という単語が出たら「Secure Erase」「時間がかかる」「何も残らない」を連想してください。通常の初期化作業で誤って打つと、作業時間が大幅に延びるため注意が必要です。</p>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q46">
+    <div class="question-header"><span class="question-badge">Q46</span>Colorless Portsの構成要素</div>
+    <p>顧客のCISO（最高情報セキュリティ責任者）は、ネットワーク全体に「Colorless Ports（カラーレスポート）」を展開したいと考えています。<br>
+    この要件を満たすために構成が必要な製品/機能はどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> HPE Aruba Networking Central</li>
+        <li data-opt="B"><span class="option-label">B.</span> AirWave</li>
+        <li data-opt="C"><span class="option-label">C.</span> IMC</li>
+        <li data-opt="D"><span class="option-label">D.</span> ClearPass</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q46"></div>
+        <div class="explanation-content">
+            <p><strong>正解: D</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. Central</strong><br>
+            間違い。CentralにはCloud Auth機能がありますが、従来の「Colorless Ports」アーキテクチャ（Dynamic Segmentation）におけるポリシーエンジンのデファクトスタンダードはClearPassです。Centralは管理プラットフォームとしての役割が主です。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. AirWave / C. IMC</strong><br>
+            間違い。これらはネットワーク管理システム（NMS）であり、認証認可を行うRADIUSサーバー機能（ポリシーマネージャー）ではありません。</p>
+
+            <p><span class="status-icon">✅</span><strong>D. ClearPass</strong><br>
+            [cite_start]正しい。Colorless Portsを実現するには、デバイスが接続された瞬間に認証（802.1X/MAC）を行い、そのデバイスの属性（ユーザー、デバイスタイプ、場所など）に基づいて動的にVLANやロール（User Role）を割り当てる必要があります。この「認証とポリシー決定」を行う中心的なサーバーがClearPass Policy Manager (CPPM) です [cite: 612-614]。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>Colorless Ports (Dynamic Segmentation) ソリューションを構成するために不可欠な認証・ポリシーサーバー製品を特定する知識が問われています。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「Colorless Ports」＝ どのポートに挿しても自動で権限付与。</li>
+                <li>自動権限付与には「認証」が必要。</li>
+                <li>Arubaの認証・ポリシーサーバーといえば「ClearPass」。</li>
+            </ol>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>Colorless Portsの3要素：
+            1. <strong>Switch:</strong> 認証リクエストを投げる (Authenticator)。
+            2. <strong>ClearPass:</strong> 認証し、ロールを返す (Auth Server)。
+            3. <strong>Gateway (Optional):</strong> トンネリングする場合、ポリシー適用の終端となる。</p>
+        </div>
+    </details>
+</div>
+
+        <!-- Q47 -->
+        <div class="question-card" id="q47">
+    <div class="question-header"><span class="question-badge">Q47</span>VSX DHCPリレーの同期設定</div>
+    <p>展示（Exhibit）を参照してください。<br>
+    <div class="code-block">
+Core-2(config# show running-config | begin vsx
+vsx
+    system-mac 06:02:10:00:02:00
+    inter-switch-link lag 256
+    role secondary
+    vsx-sync stp-global vsx-global
+!
+!
+https-server vrf mgmt
+</div>
+    <br>
+    Primary VSXスイッチにはDHCPリレーが設定されていますが、SecondaryスイッチのRunning ConfigurationにはDHCPリレー設定が表示されていません。<br>
+    両方のノードで同じ設定を持つようにするには、VSX構成をどのように変更すればよいですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> SecondaryスイッチのVSX設定で <code>vsx-sync ip-helper</code> を追加する。</li>
+        <li data-opt="B"><span class="option-label">B.</span> PrimaryスイッチのVSX設定で <code>vsx-sync dhcp-relay</code> を追加する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> SecondaryスイッチのVSX設定で <code>vsx-sync dhcp-relay</code> を追加する。</li>
+        <li data-opt="D"><span class="option-label">D.</span> PrimaryスイッチのVSX設定で <code>vsx-sync ip-helper</code> を追加する。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q47"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A, C. Secondaryスイッチでの設定</strong><br>
+            間違い。VSXの `vsx-sync` 機能は、Primaryスイッチ（Configマスター）からSecondaryスイッチへの一方向同期です。Secondary側でコマンドを入力しても、Primaryの設定を引っ張ってくることはできません。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. Primaryスイッチで <code>vsx-sync dhcp-relay</code> を追加</strong><br>
+            [cite_start]正しい。AOS-CXにおいて、DHCPリレー（IP Helper）設定を同期するためのVSXキーワードは `dhcp-relay` です。これをPrimaryスイッチのVSXコンテキストで設定することで、グローバルに設定されたDHCPリレー設定がSecondaryに複製されます [cite: 628-629]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. <code>vsx-sync ip-helper</code> を追加</strong><br>
+            間違い。Cisco等では `ip helper-address` という用語が一般的ですが、AOS-CXのVSX同期コマンドの構文としては `dhcp-relay` が正しい指定です。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>VSX環境における構成同期（Config Sync）の方向性（Primary→Secondary）と、DHCPリレー機能を同期させるための正しいコマンド構文が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>VSX Config Sync:</strong> `vsx-sync` コマンドで指定された機能（AAA, NTP, DHCP Relayなど）の設定を、PrimaryからSecondaryへ自動的にコピーします。
+            <strong>DHCP Relay:</strong> クライアントからのブロードキャストDHCP要求を、異なるセグメントのDHCPサーバーへユニキャスト転送する機能。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! Primaryスイッチでの設定
+vsx
+    vsx-sync dhcp-relay
+! 確認
+show vsx status config-sync
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q48">
+    <div class="question-header"><span class="question-badge">Q48</span>障害発生時の初動対応</div>
+    <p>最近の変更作業の後、複雑なルーティングの問題のトラブルシューティングを行っています。<br>
+    顧客から電話があり、「問題がすべてのユーザーに影響を及ぼしている」と報告を受けました。<br>
+    次に何をすべきですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 'show tech' を収集し、TACにケースを登録する。</li>
+        <li data-opt="B"><span class="option-label">B.</span> 最後に正常動作していた構成（last-known working configuration）を復元する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> 顧客に問題の内容を説明する。</li>
+        <li data-opt="D"><span class="option-label">D.</span> 顧客に各ユーザーからのログを送るよう依頼する。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q48"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. TACへの連絡</strong><br>
+            間違い。外部サポートへの連絡は有効な手段ですが、「全ユーザーに影響が出ている（全断）」という緊急事態においては、まずサービスの復旧が最優先です。ログ収集やケース作成は復旧後、または復旧作業と並行して行うべきです。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. 最後に正常動作していた構成を復元する</strong><br>
+            [cite_start]正しい。トラブルシューティングの鉄則として、変更作業直後に大規模な障害が発生した場合、原因究明よりも「切り戻し（Rollback）」によるサービス復旧を優先します。AOS-CXのチェックポイント機能などを使用して、変更前の正常な状態に戻すのが最良の初動です [cite: 639-640]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. 説明</strong><br>
+            間違い。説明責任はありますが、障害継続中に原因も不明な状態で説明を行うより、まずは復旧アクションを起こすべきです。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. ログ依頼</strong><br>
+            間違い。全ユーザーに影響がある状況で、エンドユーザーにログ収集を依頼するのは非効率であり、顧客満足度をさらに低下させます。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>ネットワーク運用におけるインシデント管理プロセス、特に「サービス復旧優先（Restore Service First）」の原則が問われています。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>試験では技術的なコマンドだけでなく、このような「ITIL的なベストプラクティス」や「エンジニアとしての正しい振る舞い」を問う問題も出題されます。「Impact All Users」というキーワードが出たら、即時の復旧（ロールバック）を選択してください。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! チェックポイントへのロールバック例
+checkpoint list
+checkpoint rollback <checkpoint-name>
+</div>
+        </div>
+    </details>
+</div>
+
+        <!-- Q49 -->
+        <div class="question-card" id="q49">
+    <div class="question-header"><span class="question-badge">Q49</span>VSXログイベントの解析</div>
+    <p>HPE Aruba Networking CXスイッチで以下のようなイベントが発生しました。<br>
+    <div class="code-block">
+2024-04-04T08:35:36.312254+00:00 ICX-Core-1 hpe-vsxd[2167]: Event|7012|LOG_INFO|AMM|1/1|VSX 2 state local down, remote up
+</div>
+    <br>
+    このメッセージは何を意味していますか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 両方のスイッチでマルチシャーシLAG 2インターフェースがダウンしている。</li>
+        <li data-opt="B"><span class="option-label">B.</span> Primary VSXメンバー上のLAG 2の物理インターフェースがダウンしている。</li>
+        <li data-opt="C"><span class="option-label">C.</span> VSX keepaliveがPrimaryメンバーのダウンを検知した。</li>
+        <li data-opt="D"><span class="option-label">D.</span> VSX Secondaryスイッチがダウンしている。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q49"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. 両方ダウン</strong><br>
+            間違い。ログには「remote up」と記録されており、対向スイッチ側のリンクは正常であることを示しています。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. Primary VSXメンバー上のLAG 2の物理インターフェースがダウンしている</strong><br>
+            正しい。ログメッセージの `VSX 2 state local down, remote up` は、マルチシャーシLAG（MCLAG）ID 2の状態を示しています。<br>
+            - <strong>local down:</strong> ログを出力したスイッチ（Local）側のLAGメンバーポートがすべてリンクダウンした。<br>
+            - <strong>remote up:</strong> VSXピア（Remote）側のLAGメンバーポートはリンクアップしている（ISLP経由で情報を取得）。<br>
+            [cite_start]これは、片側のスイッチ（Primaryと仮定）でのみ物理的なリンク障害が発生した状態を正確に表しています [cite: 647-648]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. Keepaliveによる検知</strong><br>
+            間違い。Keepaliveはスプリットブレイン検知用であり、特定のLAGインターフェースのステータス遷移（Event 7012）とは異なるイベントIDを持ちます。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. Secondaryスイッチのダウン</strong><br>
+            間違い。Secondaryスイッチ自体がダウンしている場合、ISLPも切断されるため「remote up」という情報は取得できなくなります。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>VSX同期デーモン（hpe-vsxd）が出力するSyslogメッセージを解読し、障害の範囲（ローカルのみか、全体か）を特定するトラブルシューティング能力が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>VSX MCLAG Status:</strong> VSXペアは互いのLAG状態を交換し合っています。正常時は `local up, remote up` です。片側障害時は `local down, remote up` または `local up, remote down` となり、トラフィックは正常なパスへ転送され続けます。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>ログを読む: `VSX 2` (LAG ID 2) `local down` (自機はダメ) `remote up` (相手はOK)。</li>
+                <li>「自機のLAGが落ちた」＝「自機の物理インターフェース障害」を意味する。</li>
+                <li>選択肢Bがこの状況と合致する。</li>
+            </ol>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q50">
+    <div class="question-header"><span class="question-badge">Q50</span>BFDタイマーの計算</div>
+    <p>HPE Aruba Networking CX 6300スイッチ間でOSPFのBFD（Bidirectional Forwarding Detection）を設定しました。<br>
+    スイッチAの設定は以下の通りで、スイッチBはデフォルト設定です：<br>
+    <div class="code-block">
+(config-if)# bfd min-transmit-interval=1000
+(config-if)# bfd-min-echo-receive-interval=1000
+(config-if)# bfd detect-multiplier=5
+</div>
+    <br>
+    リンクがダウンした場合、関係（BFDセッション）がダウンしたと判定されるまでにかかる時間はどれくらいですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> 5000ms後</li>
+        <li data-opt="B"><span class="option-label">B.</span> 1000ms後</li>
+        <li data-opt="C"><span class="option-label">C.</span> 1500ms後</li>
+        <li data-opt="D"><span class="option-label">D.</span> 500ms後</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q50"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. 5000ms後</strong><br>
+            [cite_start]正しい。BFDの検出時間（Detection Time）は、一般的に「検出乗数（Multiplier）× 送信間隔（Transmit Interval）」で計算されます。スイッチAの設定では、Multiplierが <code>5</code>、送信間隔が <code>1000ms</code> (1秒) です。したがって、相手からのHelloパケットが 5 × 1000ms = 5000ms (5秒) 間途絶えた時点でリンクダウンと判定します [cite: 661-664]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B, C, D. その他の時間</strong><br>
+            間違い。計算式（5 * 1000）に基づかない数値です。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>BFDの基本パラメータ（送信間隔と検出乗数）から、障害検知タイマー（Detection Time）を計算する知識が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>BFD非同期モード:</strong> 定期的に制御パケットを送信し合い、一定回数（Multiplier）連続して受信できなかった場合にダウンとみなします。<br>
+            <strong>Default設定:</strong> AOS-CXのモデルによりますが、明示的に設定された側（スイッチA）のパラメータがセッション確立のベース（あるいは遅い方に合わせる）となります。ここではスイッチA側でのダウン検知時間を問うているため、スイッチAの設定値を使用します。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>ダウン判定時間 ＝ Detect Multiplier × Interval。</li>
+                <li>設問の値：Multiplier = 5, Interval = 1000。</li>
+                <li>5 × 1000 = 5000ms。</li>
+            </ol>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! BFDの設定と確認
+interface 1/1/1
+    bfd min-transmit-interval 1000 min-receive-interval 1000 detect-multiplier 5
+! 確認
+show bfd connections
+</div>
+        </div>
+    </details>
+</div>
+
+    </div>
+
+    <!-- ================= PAGE 6 (Q51-55) ================= -->
+    <div id="page-6" class="page-container">
+        
+        <!-- Q51 -->
+        <div class="question-card" id="q51">
+    <div class="question-header"><span class="question-badge">Q51</span>VSX LAGの設定不備</span></div>
+    <p>VSXペア上でGatewayへのLAGインターフェースを以下のコマンドを使用して作成しました。<br>
+<div class="code-block">
+   interface lag 10
+    description Gateway
+    no shutdown
+    no routing
+    vlan trunk native 1
+    vlan trunk allowed all
+    lacp mode active
+</div>
+    <br>
+    Gateway側のLAG（リンクアグリゲーショングループ）の状態を確認すると、メンバーリンクのうち1つしかアップになっていないことがわかりました。<br>
+    この原因は何ですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> GatewayがLACPパッシブモードのみをサポートしている。</li>
+        <li data-opt="B"><span class="option-label">B.</span> <code>multi-chassis</code> パラメータが不足している。</li>
+        <li data-opt="C"><span class="option-label">C.</span> <code>vsx-sync</code> パラメータが不足している。</li>
+        <li data-opt="D"><span class="option-label">D.</span> LACP fallbackを有効にする必要がある。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q51"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. LACPパッシブのみサポート</strong><br>
+            間違い。スイッチ側がActiveであれば、相手がPassiveでもActiveでもリンクは確立します。片方だけ上がるという症状の直接的な理由にはなりにくいです。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. <code>multi-chassis</code> パラメータが不足している</strong><br>
+            [cite_start]正しい。VSX環境において、2台のスイッチにまたがるリンクアグリゲーション（MCLAG）を構成する場合、LAGインターフェース設定内で <code>lag 10 multi-chassis</code> コマンド（または <code>multi-chassis</code> キーワード）が必須です。これがない場合、各スイッチは個別のLACP System IDを使用するため、Gateway側はそれらを「2つの異なるスイッチ」として認識します。標準的なLACPの実装では、同一LAG IDに対して異なるSystem IDを持つリンクを混在させることができず、結果として片方のリンクのみが選出されてアップになり、もう片方がブロックされる挙動となります [cite: 681-682]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. <code>vsx-sync</code> パラメータ不足</strong><br>
+            間違い。設定同期は管理上の機能であり、LACPのリンク確立動作（データプレーン/コントロールプレーン）には直接影響しません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. LACP fallback</strong><br>
+            間違い。Fallbackは相手がLACPを話さない場合（PXEブート等）の機能です。GatewayがLACPを設定している場合、System IDの不一致が根本原因です。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>VSXにおけるMulti-Chassis LAG (MCLAG) の必須設定コマンド（`multi-chassis`）と、設定漏れによるLACPの挙動（片側のみアップ）についてのトラブルシューティング能力が問われています。</p>
+
+            <div class="exp-header-main">前提知識</div>
+            <p><strong>multi-chassis:</strong> このコマンドを入れることで、PrimaryとSecondaryのスイッチは、そのLAG IDに対して「共通のLACP System ID」を使用するようになります。これにより対向機器は「1台のスイッチと接続している」と認識できます。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! 正しいVSX LAG設定
+interface lag 10
+    multi-chassis
+    no routing
+    vlan trunk allowed all
+    lacp mode active
+</div>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q52">
+    <div class="question-header"><span class="question-badge">Q52</span>ARPポイズニング対策の推奨事項</div>
+    <p>クライアント・サーバー間の通信が必要なネットワークにおいて、悪意のあるDHCPサーバーの使用や「ARPポイズニング（ARPスプーフィング）」の脅威から保護する方法を、新しいHPE Aruba Networking CXの顧客にどのように説明しますか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> システム構成データベースが認証済みクライアントの情報を保護します。</li>
+        <li data-opt="B"><span class="option-label">B.</span> コントロールプレーンポリシー（CoPP）で許可されたDHCPサーバーを設定できます。</li>
+        <li data-opt="C"><span class="option-label">C.</span> DHCPスヌーピングテーブルとARP保護（ARP Protection）が連携して正しい情報を維持します。</li>
+        <li data-opt="D"><span class="option-label">D.</span> プライベートVLANを使用してサーバーリソースを隔離し、偽のDHCPサーバーから保護します。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q52"></div>
+        <div class="explanation-content">
+            <p><strong>正解: C</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. システム構成データベース</strong><br>
+            間違い。一般的なデータベース機能の説明であり、L2攻撃への具体的対策ではありません。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. コントロールプレーンポリシー (CoPP)</strong><br>
+            間違い。CoPPはスイッチのCPUを過負荷から守る機能です。DHCPパケットのレート制限などは可能ですが、パケットの中身（偽のDHCP OfferやARP）を正当性に基づいてフィルタリングする機能ではありません。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. DHCPスヌーピングテーブルとARP保護が連携して正しい情報を維持する</strong><br>
+            [cite_start]正しい。セキュリティのベストプラクティスとして、まず<strong>DHCP Snooping</strong>を有効にして「正規のIPとMACの組み合わせ（バインディングデータベース）」を作成します。次に<strong>ARP Protection (Dynamic ARP Inspection)</strong> を有効にすると、スイッチはこのデータベースを参照し、登録されていない（不正な）IP/MACの組み合わせを持つARPパケットを破棄します。これにより、ARPポイズニング（なりすまし）とRogue DHCPサーバーの両方を防ぐことができます [cite: 693-694]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. プライベートVLAN (PVLAN)</strong><br>
+            間違い。PVLANはクライアント間の通信を遮断するには有効ですが、クライアント・サーバー間通信が必要な環境において、Gatewayのなりすまし（ARPスプーフィング）を直接防ぐ機能ではありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>L2セキュリティの基本である「DHCP Snooping」と「Dynamic ARP Inspection (DAI)」の連携メカニズムについての理解が問われています。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>脅威：「偽DHCP」と「ARPポイズニング」。</li>
+                <li>対策：これらを防ぐのは「DHCP Snooping」と「ARP Protection」。</li>
+                <li>これらが「連携（Together）」して動作するという記述がある選択肢Cを選ぶ。</li>
+            </ol>
+        </div>
+    </details>
+</div>
+
+        <!-- Q53 -->
+        <div class="question-card" id="q53">
+    <div class="question-header"><span class="question-badge">Q53</span>Aruba Centralでのキャパシティ計画</div>
+    <p>顧客のCXスイッチはHPE Aruba Networking Centralで管理されています。<br>
+    既存のCXスイッチに新しいAP（アクセスポイント）を接続する計画を立てています。<br>
+    利用可能なポート数とPoE容量（PoE Capacity）が十分にあるかどうかを判断するために、どのレポートを実行すべきですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> Switch Capacity Planning</li>
+        <li data-opt="B"><span class="option-label">B.</span> Resource Utilization</li>
+        <li data-opt="C"><span class="option-label">C.</span> Infra Inventory</li>
+        <li data-opt="D"><span class="option-label">D.</span> Network</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q53"></div>
+        <div class="explanation-content">
+            <p><strong>正解: A</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">✅</span><strong>A. Switch Capacity Planning</strong><br>
+            [cite_start]正しい。Aruba Centralのレポート機能にある「Switch Capacity Planning」は、スイッチのポート使用率や<strong>PoE消費量（Power over Ethernet）</strong>の傾向を可視化し、将来の増設に耐えうるかを判断するために特化しています。AP増設時の事前調査に最適です [cite: 701-703]。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. Resource Utilization</strong><br>
+            間違い。これは主にCPUやメモリの使用率を示すレポートであり、物理ポートの空き状況やPoEバジェットの計画には不向きです。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. Infra Inventory</strong><br>
+            間違い。デバイスのモデル、シリアル番号、ファームウェアバージョンなどの資産一覧を表示しますが、キャパシティ（容量）の分析は提供しません。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. Network</strong><br>
+            間違い。ネットワーク全体の一般的なサマリであり、特定のスイッチリソース計画用ではありません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>Aruba Centralのレポート機能を活用し、AP増設プロジェクトに必要なハードウェアリソース（ポートと電力）の空き状況を確認する方法が問われています。</p>
+
+            <div class="exp-header-main">実務・試験の要点</div>
+            <p>AP増設時は「PoEバジェット」が最もクリティカルな制約になりがちです。Capacity Planningレポートは、過去のトレンドから「いつ枯渇するか」を予測するのに役立ちます。</p>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q54">
+    <div class="question-header"><span class="question-badge">Q54</span>Centralグループ設定の同期要件</div>
+    <p>既存の設定が入っているスイッチを、HPE Aruba Networking Centralの既存のグループ（設定あり）に追加しましたが、設定が同期されません。<br>
+    この原因として考えられるものはどれですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> スイッチが組織設定ページでまだ承認待ち（Pending Authorization）になっている。</li>
+        <li data-opt="B"><span class="option-label">B.</span> スイッチがCentralとの管理接続を確立できていない。</li>
+        <li data-opt="C"><span class="option-label">C.</span> 工場出荷時設定（Factory Default）のスイッチのみが、既存設定を持つグループに追加（同期）できる。</li>
+        <li data-opt="D"><span class="option-label">D.</span> スイッチがVSXペアで構成されており、Centralがサポートしていない。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q54"></div>
+        <div class="explanation-content">
+            <p><strong>正解: C</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. 承認待ち</strong><br>
+            間違い。デバイスが承認されていない場合、そもそもグループへの割り当てやオンライン状態の確認ができません。「追加したが同期しない」という状況とは異なります。</p>
+
+            <p><span class="status-icon">❌</span><strong>B. 管理接続の失敗</strong><br>
+            間違い。接続できていない場合はオフラインとなり、これも同期以前の問題です。</p>
+
+            <p><span class="status-icon">✅</span><strong>C. 工場出荷時設定（Factory Default）のスイッチのみが追加可能</strong><br>
+            [cite_start]正しい。Aruba CentralのUIグループ（設定をGUI/Templateで管理するグループ）にスイッチを追加して設定を同期させるには、そのスイッチが<strong>工場出荷時設定（初期状態）</strong>である必要があります。既存の設定（Dirty Config）を持つスイッチをグループに入れると、既存設定との競合を防ぐために同期が保留されるか、設定ミスマッチ状態となります [cite: 713]。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. VSX非対応</strong><br>
+            間違い。Aruba CentralはVSX構成のスイッチの管理・監視をサポートしています（バージョンにより一部制限はありますが、追加自体は可能です）。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>Aruba Centralのプロビジョニング仕様（Zero Touch Provisioningの原則）についての理解が問われています。</p>
+
+            <div class="exp-header-main">解くための考え方</div>
+            <ol>
+                <li>「設定が入ったスイッチ」を「設定が入ったCentralグループ」に入れた。</li>
+                <li>Centralは既存設定を勝手に上書きしない安全設計になっている。</li>
+                <li>同期させるには、スイッチを初期化（erase startup-config）してから接続する必要がある。</li>
+            </ol>
+        </div>
+    </details>
+</div>
+
+<div class="question-card" id="q55">
+    <div class="question-header"><span class="question-badge">Q55</span>802.1X/MAC認証の遅延解消</div>
+    <p>オフィス環境で802.1X認証とMAC認証を設定しました。<br>
+    テスト中、802.1Xをサポートしていないデバイス（プリンター等）がIPアドレスを取得するまでに数分の時間がかかることに気づきました。<br>
+    セキュリティ設定を維持しつつ、これらのデバイスの接続時間を短縮するために何をすべきですか。</p>
+    <ul class="options-list">
+        <li data-opt="A"><span class="option-label">A.</span> サポートしないデバイスが接続するポートで802.1Xを無効にする。</li>
+        <li data-opt="B"><span class="option-label">B.</span> 認証の優先順位（auth-precedence）をMAC認証、次に802.1Xの順に設定する。</li>
+        <li data-opt="C"><span class="option-label">C.</span> すべてのポートで802.1X EAPOLタイムアウト値を増やす。</li>
+        <li data-opt="D"><span class="option-label">D.</span> すべてのポートでMAC認証開始タイマーを減らす。</li>
+    </ul>
+    <details>
+        <summary><h3>💡 解答と詳細解説（クリックで展開）</h3></summary>
+        <div class="result-area" id="res-q55"></div>
+        <div class="explanation-content">
+            <p><strong>正解: B</strong></p>
+
+            <div class="exp-header-main">選択肢別・徹底解説</div>
+            <p><span class="status-icon">❌</span><strong>A. 802.1X無効化</strong><br>
+            間違い。ポート単位で無効化すると、そのポートにPCがつながれた場合に802.1Xが行われず、セキュリティレベルが低下します（Colorless Portsの概念に反します）。</p>
+
+            <p><span class="status-icon">✅</span><strong>B. 認証の優先順位（auth-precedence）をMAC認証、次に802.1Xの順に設定する</strong><br>
+            [cite_start]正しい。デフォルトでは、スイッチは802.1X認証を先に試行し、タイムアウト（通常30秒×数回）してからMAC認証にフォールバックします。これが遅延の原因です。<code>auth-precedence mac-auth dot1x</code> を設定することで、まずMAC認証（即時完了）を行い、失敗した場合や並行して802.1Xを行う動作となり、非802.1Xデバイスの接続待ち時間を劇的に短縮できます [cite: 720-721]。</p>
+
+            <p><span class="status-icon">❌</span><strong>C. EAPOLタイムアウトを増やす</strong><br>
+            間違い。タイムアウトを増やすと、MAC認証に移行するまでの待ち時間がさらに長くなり、逆効果です。</p>
+
+            <p><span class="status-icon">❌</span><strong>D. MAC認証開始タイマー</strong><br>
+            間違い。問題は「802.1Xのタイムアウト待ち」にあるため、MAC認証側のタイマーを調整しても解決しません。</p>
+
+            <div class="exp-header-main">問われている要件</div>
+            <p>ハイブリッド認証環境（PCとIoTが混在）における認証シーケンスの最適化（Auth Precedence）に関する知識が問われています。</p>
+
+            <div class="exp-header-main">ハンズオン</div>
+            <div class="code-block">
+! 認証順序の変更 (MAC認証優先)
+interface 1/1/1
+    aaa authentication port-access auth-precedence mac-auth dot1x
+    aaa authentication port-access auth-priority dot1x mac-auth
+! ※Priorityは802.1Xを高く保つのが一般的
+</div>
+        </div>
+    </details>
+</div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination" id="pagination-controls"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pagination Logic
+            const totalPages = 6;
+            let currentPage = 1;
+            const paginationContainer = document.getElementById('pagination-controls');
+
+            function updateDisplay() {
+                for (let i = 1; i <= totalPages; i++) {
+                    const page = document.getElementById(`page-${i}`);
+                    if (page) page.classList.remove('active');
+                }
+                const activePage = document.getElementById(`page-${currentPage}`);
+                if (activePage) activePage.classList.add('active');
+                renderButtons();
+                window.scrollTo(0, 0);
+            }
+
+            function renderButtons() {
+                paginationContainer.innerHTML = '';
+                const prevBtn = document.createElement('button');
+                prevBtn.textContent = '« 前へ';
+                prevBtn.className = 'page-btn';
+                prevBtn.disabled = (currentPage === 1);
+                prevBtn.onclick = () => { if(currentPage > 1) { currentPage--; updateDisplay(); }};
+                paginationContainer.appendChild(prevBtn);
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.textContent = i;
+                    btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                    btn.onclick = () => { currentPage = i; updateDisplay(); };
+                    paginationContainer.appendChild(btn);
+                }
+
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = '次へ »';
+                nextBtn.className = 'page-btn';
+                nextBtn.disabled = (currentPage === totalPages);
+                nextBtn.onclick = () => { if(currentPage < totalPages) { currentPage++; updateDisplay(); }};
+                paginationContainer.appendChild(nextBtn);
+            }
+
+// --- QUIZ LOGIC ---
+            function initQuiz() {
+                const questionCards = document.querySelectorAll('.question-card');
+
+                questionCards.forEach(card => {
+                    const optionsList = card.querySelector('.options-list');
+                    const details = card.querySelector('details');
+                    const summary = card.querySelector('summary');
+                    const resultArea = card.querySelector('.result-area');
+                    const correctHeader = card.querySelector('.explanation-content strong'); // e.g., "正解: A, B"
+
+                    // Parse correct answers from the explanation text
+                    let correctAnswers = [];
+                    if (correctHeader) {
+                        const text = correctHeader.textContent; // "正解: A, B"
+                        // Match A, B, C... only as whole words to avoid matching text like "MACSec"
+                        const matches = text.match(/\b[A-E]\b/g);
+                        if (matches) {
+                            correctAnswers = matches;
+                        }
+                    }
+
+                    // 1. Option Selection
+                    const options = optionsList.querySelectorAll('li');
+                    options.forEach(li => {
+                        li.addEventListener('click', () => {
+                            if (details.open) return; // Disable changing options after revealing answer
+                            li.classList.toggle('selected');
+                        });
+                    });
+
+                    // 2. Summary Click (Check Answer)
+                    summary.addEventListener('click', (e) => {
+                        if (details.open) {
+                            return; // Closing
+                        }
+
+                        // Checking answer
+                        const selectedOptions = Array.from(options)
+                            .filter(li => li.classList.contains('selected'))
+                            .map(li => li.getAttribute('data-opt'));
+
+                        selectedOptions.sort();
+                        correctAnswers.sort();
+
+                        const isCorrect = JSON.stringify(selectedOptions) === JSON.stringify(correctAnswers);
+
+                        if (isCorrect) {
+                            resultArea.innerHTML = '🎉 正解！';
+                            resultArea.className = 'result-area result-correct';
+                        } else {
+                            resultArea.innerHTML = '😢 不正解...';
+                            resultArea.className = 'result-area result-incorrect';
+                        }
+
+                        options.forEach(li => {
+                            const optVal = li.getAttribute('data-opt');
+                            const isSelected = li.classList.contains('selected');
+                            const isActuallyCorrect = correctAnswers.includes(optVal);
+
+                            li.classList.remove('correct', 'incorrect', 'missed');
+
+                            if (isActuallyCorrect) {
+                                li.classList.add('correct');
+                            } 
+                            if (isSelected && !isActuallyCorrect) {
+                                li.classList.add('incorrect');
+                            }
+                            if (!isSelected && isActuallyCorrect) {
+                                li.classList.add('missed');
+                            }
+                        });
+                    });
+                });
+            }
+
+            initQuiz();
+            updateDisplay();
+        });
+    </script>
+
+</body>
+</html>
